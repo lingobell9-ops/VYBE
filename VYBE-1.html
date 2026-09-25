@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09090d">
+  <title>VYBE • by Vellora</title>
+  
+  <style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#09090d;color:#fff}body{overflow:hidden}.app{height:100dvh;position:relative;overflow:hidden;background:#09090d}.topbar{position:fixed;z-index:10;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:linear-gradient(#09090ddd,transparent)}.brand{font-weight:900;letter-spacing:3px;font-size:22px}.brand span{display:inline-grid;place-items:center;width:27px;height:27px;margin-right:3px;border-radius:8px;background:linear-gradient(135deg,#ff2bd6,#7b5cff,#21d4fd);font-size:17px}.icon-btn,.close{border:0;background:#ffffff12;color:#fff;border-radius:50%;width:38px;height:38px;font-size:24px}.feed{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}.feed::-webkit-scrollbar{display:none}.video-card{height:100%;min-height:100%;position:relative;scroll-snap-align:start;overflow:hidden}.video-bg{position:absolute;inset:0;background-size:cover;background-position:center}.bg1{background:radial-gradient(circle at 25% 25%,#ff2bd6,transparent 25%),linear-gradient(145deg,#10101a,#2c1051 45%,#111827)}.bg2{background:radial-gradient(circle at 75% 30%,#21d4fd,transparent 25%),linear-gradient(145deg,#071c2b,#3a155f 50%,#0a0a10)}.bg3{background:radial-gradient(circle at 50% 20%,#7b5cff,transparent 27%),linear-gradient(145deg,#130b27,#25114c 55%,#07151d)}.play{position:absolute;inset:0;display:grid;place-items:center;font-size:44px;color:#ffffff55}.shade{position:absolute;inset:0;background:linear-gradient(transparent 45%,#000b 78%,#000 100%)}.video-info{position:absolute;left:18px;right:92px;bottom:92px}.creator{font-size:17px;font-weight:800;margin-bottom:10px}.verified{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;font-size:11px;background:#21d4fd;color:#061018}.caption{font-size:15px;line-height:1.4;margin-bottom:8px}.tags{color:#c8b9ff;font-size:13px}.actions{position:absolute;right:13px;bottom:100px;display:flex;flex-direction:column;gap:18px}.action{background:none;border:0;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px}.action b{font-size:28px;text-shadow:0 2px 8px #000}.action small{font-size:11px}.action.liked b{color:#ff3f9f}.bottom{position:fixed;z-index:20;left:0;right:0;bottom:0;height:72px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-around;background:#08080cdd;backdrop-filter:blur(16px);border-top:1px solid #ffffff12}.nav{border:0;background:none;color:#9b9ba6;font-size:21px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px}.nav span{font-size:10px}.nav.active{color:#fff}.create{width:54px;height:40px;border:0;border-radius:14px;color:#fff;font-size:29px;line-height:1;background:linear-gradient(135deg,#ff2bd6,#7b5cff,#21d4fd);box-shadow:0 0 24px #7b5cff66}.sheet{position:fixed;z-index:50;inset:0;background:#000a;display:grid;place-items:end}.sheet.hidden{display:none}.sheet-inner{width:100%;padding:28px 22px 34px;background:#15151d;border-radius:26px 26px 0 0;box-shadow:0 -15px 50px #000}.sheet-inner h2{margin:0 0 8px}.sheet-inner p{color:#aaaab5}.close{float:right;font-size:26px}.primary,.secondary{width:100%;padding:15px;border-radius:14px;border:0;margin-top:12px;font-size:15px;font-weight:800}.primary{color:#fff;background:linear-gradient(135deg,#ff2bd6,#7b5cff)}.secondary{color:#ddd;background:#ffffff10}@media(min-width:700px){.app{max-width:430px;margin:auto;box-shadow:0 0 70px #000}.topbar,.bottom{max-width:430px;left:50%;right:auto;transform:translateX(-50%);width:100%}}</style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span>V</span>YBE</div>
+      <button class="icon-btn" id="searchBtn" aria-label="Search">⌕</button>
+    </header>
+
+    <main id="feed" class="feed">
+      <article class="video-card" data-id="1">
+        <div class="video-bg bg1"><div class="play">▶</div></div>
+        <div class="shade"></div>
+        <div class="video-info">
+          <div class="creator">@diva_vybe <span class="verified">✓</span></div>
+          <div class="caption">When the squad says “one more game” 😭🔥</div>
+          <div class="tags">#gaming #warzone #vybe</div>
+        </div>
+        <div class="actions">
+          <button class="action like"><b>♥</b><small>12.4K</small></button>
+          <button class="action comment"><b>●</b><small>842</small></button>
+          <button class="action share"><b>↗</b><small>Share</small></button>
+        </div>
+      </article>
+
+      <article class="video-card" data-id="2">
+        <div class="video-bg bg2"><div class="play">▶</div></div>
+        <div class="shade"></div>
+        <div class="video-info">
+          <div class="creator">@mila.vybe</div>
+          <div class="caption">Today's VYBE: show us your hidden talent ✨</div>
+          <div class="tags">#challenge #talent #vybe</div>
+        </div>
+        <div class="actions">
+          <button class="action like"><b>♥</b><small>8.7K</small></button>
+          <button class="action comment"><b>●</b><small>391</small></button>
+          <button class="action share"><b>↗</b><small>Share</small></button>
+        </div>
+      </article>
+
+      <article class="video-card" data-id="3">
+        <div class="video-bg bg3"><div class="play">▶</div></div>
+        <div class="shade"></div>
+        <div class="video-info">
+          <div class="creator">@jay.official <span class="verified">✓</span></div>
+          <div class="caption">POV: your first VYBE challenge goes viral 👀</div>
+          <div class="tags">#fyp #trending #vybe</div>
+        </div>
+        <div class="actions">
+          <button class="action like"><b>♥</b><small>23.1K</small></button>
+          <button class="action comment"><b>●</b><small>1.2K</small></button>
+          <button class="action share"><b>↗</b><small>Share</small></button>
+        </div>
+      </article>
+    </main>
+
+    <nav class="bottom">
+      <button class="nav active" data-tab="home">⌂<span>Home</span></button>
+      <button class="nav" data-tab="discover">⌕<span>Discover</span></button>
+      <button class="create" id="createBtn">+</button>
+      <button class="nav" data-tab="challenges">🏆<span>Challenges</span></button>
+      <button class="nav" data-tab="profile">◉<span>Profile</span></button>
+    </nav>
+  </div>
+
+  <div class="sheet hidden" id="sheet">
+    <div class="sheet-inner">
+      <button class="close" id="closeSheet">×</button>
+      <h2 id="sheetTitle">Create your VYBE</h2>
+      <p id="sheetText">Upload a short video and join today's challenge.</p>
+      <button class="primary" id="demoPost">＋ Choose video</button>
+      <button class="secondary" id="cancelPost">Cancel</button>
+    </div>
+  </div>
+
+  <script>const sheet=document.getElementById("sheet"),createBtn=document.getElementById("createBtn"),closeSheet=document.getElementById("closeSheet"),cancelPost=document.getElementById("cancelPost"),demoPost=document.getElementById("demoPost");
+function openSheet(){sheet.classList.remove("hidden")}
+function close(){sheet.classList.add("hidden")}
+createBtn.onclick=openSheet;closeSheet.onclick=close;cancelPost.onclick=close;
+demoPost.onclick=()=>{alert("Demo mode: the next build will connect this button to real video upload/storage.");close()};
+document.querySelectorAll(".like").forEach(btn=>btn.addEventListener("click",()=>btn.classList.toggle("liked")));
+document.querySelectorAll(".comment").forEach(btn=>btn.addEventListener("click",()=>alert("Comments screen coming in VYBE v1.1.")));
+document.querySelectorAll(".share").forEach(btn=>btn.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(location.href);alert("VYBE link copied!")}catch(e){alert("Share your VYBE with friends!")}}));
+document.querySelectorAll(".nav").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));btn.classList.add("active");const tab=btn.dataset.tab;if(tab!=="home")alert(tab.charAt(0).toUpperCase()+tab.slice(1)+" screen is part of the next build.")}));
+document.getElementById("searchBtn").onclick=()=>alert("Search is coming in the next build.");
+</script>
+</body>
+</html>
