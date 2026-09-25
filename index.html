@@ -1,763 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#09090d">
-<meta name="description" content="VYBE by Vellora - Create. Challenge. Connect.">
 <title>VYBE • by Vellora</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-html,body{
-  width:100%;
-  min-height:100%;
-  background:#08080d;
-  color:#ffffff;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-  overflow-x:hidden;
-}
-
-button,input{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.app{
-  width:100%;
-  max-width:620px;
-  min-height:100vh;
-  margin:0 auto;
-  background:#09090d;
-  position:relative;
-  overflow:hidden;
-}
-
-/* TOP BAR */
-
-.topbar{
-  height:68px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  background:#0d0d14;
-  border-bottom:1px solid #252532;
-  position:sticky;
-  top:0;
-  z-index:50;
-}
-
-.logo{
-  font-size:29px;
-  font-weight:900;
-  letter-spacing:4px;
-}
-
-.logo .pink{
-  color:#e33dff;
-}
-
-.top-actions{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.icon-btn{
-  width:40px;
-  height:40px;
-  border:0;
-  border-radius:50%;
-  background:#181821;
-  color:#fff;
-  font-size:19px;
-}
-
-.icon-btn:hover{
-  background:#242432;
-}
-
-/* CONTENT */
-
-.content{
-  padding:18px;
-  padding-bottom:105px;
-}
-
-/* HERO */
-
-.hero{
-  min-height:420px;
-  border-radius:28px;
-  padding:28px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 15% 15%,rgba(124,60,255,.55),transparent 35%),
-    radial-gradient(circle at 90% 25%,rgba(255,56,210,.40),transparent 35%),
-    radial-gradient(circle at 50% 100%,rgba(35,122,255,.35),transparent 40%),
-    linear-gradient(145deg,#15152a,#080810);
-  border:1px solid #292943;
-  box-shadow:0 20px 60px rgba(0,0,0,.35);
-}
-
-.hero::before{
-  content:"";
-  position:absolute;
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.12);
-  top:-80px;
-  right:-60px;
-}
-
-.hero::after{
-  content:"";
-  position:absolute;
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.08);
-  top:-35px;
-  right:-15px;
-}
-
-.hero-content{
-  position:relative;
-  z-index:2;
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  padding:7px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.09);
-  border:1px solid rgba(255,255,255,.13);
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:15px;
-}
-
-.hero h1{
-  font-size:46px;
-  line-height:1;
-  margin-bottom:13px;
-  letter-spacing:-2px;
-}
-
-.gradient-text{
-  background:linear-gradient(90deg,#e33dff,#7b6cff,#39a7ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.hero p{
-  color:#c6c6d2;
-  line-height:1.55;
-  font-size:15px;
-  max-width:450px;
-}
-
-.hero-buttons{
-  display:flex;
-  gap:10px;
-  margin-top:22px;
-  flex-wrap:wrap;
-}
-
-.primary-btn{
-  border:0;
-  border-radius:14px;
-  padding:13px 20px;
-  color:#fff;
-  font-weight:800;
-  background:linear-gradient(135deg,#e33dff,#675cff);
-  box-shadow:0 8px 25px rgba(151,73,255,.25);
-}
-
-.secondary-btn{
-  border:1px solid #343447;
-  border-radius:14px;
-  padding:13px 20px;
-  color:#fff;
-  font-weight:700;
-  background:#15151f;
-}
-
-/* AGE SWITCH */
-
-.section{
-  margin-top:20px;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-
-.section-title h2{
-  font-size:20px;
-}
-
-.section-title span{
-  color:#888895;
-  font-size:12px;
-}
-
-.age-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.age-card{
-  border:1px solid #292937;
-  border-radius:20px;
-  padding:18px;
-  background:#111119;
-  min-height:145px;
-}
-
-.age-card.blue{
-  background:
-    radial-gradient(circle at 100% 0%,rgba(50,120,255,.25),transparent 50%),
-    #10121c;
-}
-
-.age-card.purple{
-  background:
-    radial-gradient(circle at 100% 0%,rgba(190,55,255,.25),transparent 50%),
-    #15101c;
-}
-
-.age-icon{
-  font-size:28px;
-  margin-bottom:10px;
-}
-
-.age-card h3{
-  font-size:16px;
-  margin-bottom:6px;
-}
-
-.age-card p{
-  font-size:12px;
-  color:#9696a5;
-  line-height:1.45;
-}
-
-/* CHALLENGE */
-
-.challenge-card{
-  border-radius:24px;
-  padding:20px;
-  background:
-    linear-gradient(135deg,rgba(227,61,255,.12),rgba(73,91,255,.09)),
-    #111119;
-  border:1px solid #302b42;
-}
-
-.challenge-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.challenge-tag{
-  color:#f28dff;
-  font-size:11px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.timer{
-  color:#9ea0ff;
-  font-size:12px;
-  font-weight:700;
-}
-
-.challenge-card h3{
-  font-size:23px;
-  margin:12px 0 7px;
-}
-
-.challenge-card p{
-  color:#a7a7b6;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.challenge-actions{
-  display:flex;
-  gap:9px;
-  margin-top:17px;
-}
-
-.small-btn{
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid #363647;
-  background:#191923;
-  color:#fff;
-  font-size:12px;
-  font-weight:700;
-}
-
-.small-btn.primary{
-  border:0;
-  background:linear-gradient(135deg,#e33dff,#596cff);
-}
-
-/* FEATURE GRID */
-
-.feature-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.feature{
-  padding:17px;
-  border-radius:18px;
-  background:#111119;
-  border:1px solid #262633;
-}
-
-.feature-icon{
-  font-size:24px;
-  margin-bottom:9px;
-}
-
-.feature h3{
-  font-size:14px;
-  margin-bottom:5px;
-}
-
-.feature p{
-  color:#858594;
-  font-size:11px;
-  line-height:1.4;
-}
-
-/* FEED */
-
-.feed-card{
-  border-radius:22px;
-  overflow:hidden;
-  background:#111119;
-  border:1px solid #282834;
-}
-
-.video-placeholder{
-  height:390px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  background:
-    radial-gradient(circle at 30% 20%,rgba(227,61,255,.45),transparent 30%),
-    radial-gradient(circle at 80% 70%,rgba(52,103,255,.45),transparent 35%),
-    linear-gradient(145deg,#191324,#090910);
-}
-
-.play-circle{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(255,255,255,.13);
-  backdrop-filter:blur(8px);
-  font-size:27px;
-}
-
-.video-label{
-  position:absolute;
-  left:16px;
-  bottom:16px;
-  padding:7px 10px;
-  border-radius:9px;
-  background:rgba(0,0,0,.55);
-  font-size:11px;
-  font-weight:700;
-}
-
-.feed-info{
-  padding:15px;
-}
-
-.creator{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.avatar{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#e33dff,#526dff);
-  font-weight:900;
-}
-
-.creator-name{
-  font-size:14px;
-  font-weight:800;
-}
-
-.creator-handle{
-  color:#777786;
-  font-size:11px;
-  margin-top:3px;
-}
-
-.feed-text{
-  margin-top:12px;
-  font-size:13px;
-  line-height:1.45;
-  color:#c8c8d2;
-}
-
-.feed-actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-}
-
-.action{
-  flex:1;
-  padding:9px 5px;
-  border:1px solid #292934;
-  border-radius:10px;
-  background:#181820;
-  color:#fff;
-  font-size:12px;
-}
-
-/* LIVE */
-
-.live-card{
-  border-radius:22px;
-  padding:18px;
-  background:
-    radial-gradient(circle at 100% 0%,rgba(255,54,99,.22),transparent 40%),
-    #111119;
-  border:1px solid #35252e;
-}
-
-.live-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.live-pill{
-  background:#ff3159;
-  padding:6px 9px;
-  border-radius:8px;
-  font-size:10px;
-  font-weight:900;
-}
-
-.live-card h3{
-  margin-top:16px;
-  font-size:20px;
-}
-
-.live-card p{
-  color:#92929f;
-  font-size:12px;
-  margin-top:6px;
-  line-height:1.5;
-}
-
-/* PROFILE */
-
-.profile-card{
-  padding:22px;
-  border-radius:23px;
-  background:#111119;
-  border:1px solid #292934;
-  text-align:center;
-}
-
-.profile-avatar{
-  width:80px;
-  height:80px;
-  margin:0 auto 12px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#e33dff,#596cff);
-  font-size:30px;
-  font-weight:900;
-}
-
-.profile-card h3{
-  font-size:20px;
-}
-
-.profile-card p{
-  color:#888895;
-  font-size:12px;
-  margin-top:5px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  margin-top:20px;
-  border-top:1px solid #292934;
-  padding-top:16px;
-}
-
-.stat strong{
-  display:block;
-  font-size:17px;
-}
-
-.stat span{
-  color:#777786;
-  font-size:10px;
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-  position:fixed;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  width:100%;
-  max-width:620px;
-  height:78px;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  background:rgba(10,10,16,.96);
-  border-top:1px solid #282833;
-  backdrop-filter:blur(16px);
-  z-index:100;
-}
-
-.nav-item{
-  border:0;
-  background:transparent;
-  color:#737380;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  font-size:10px;
-}
-
-.nav-item .nav-icon{
-  font-size:21px;
-}
-
-.nav-item.active{
-  color:#fff;
-}
-
-.nav-item.active .nav-icon{
-  filter:drop-shadow(0 0 8px rgba(227,61,255,.6));
-}
-
-.create-button{
-  width:44px;
-  height:32px;
-  border-radius:10px;
-  border:0;
-  background:linear-gradient(135deg,#e33dff,#586bff);
-  color:#fff;
-  font-size:20px;
-  font-weight:900;
-}
-
-/* MODAL */
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(8px);
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  z-index:200;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:620px;
-  background:#12121a;
-  border:1px solid #292936;
-  border-radius:26px 26px 0 0;
-  padding:24px;
-  animation:slideUp .25s ease;
-}
-
-@keyframes slideUp{
-  from{
-    transform:translateY(100%);
-  }
-  to{
-    transform:translateY(0);
-  }
-}
-
-.modal-box h2{
-  font-size:22px;
-}
-
-.modal-box p{
-  color:#92929f;
-  font-size:13px;
-  line-height:1.5;
-  margin-top:7px;
-}
-
-.close{
-  float:right;
-  border:0;
-  background:#22222d;
-  color:#fff;
-  width:34px;
-  height:34px;
-  border-radius:50%;
-}
-
-.modal-options{
-  display:grid;
-  gap:10px;
-  margin-top:20px;
-}
-
-.option{
-  width:100%;
-  text-align:left;
-  border:1px solid #2b2b38;
-  background:#181820;
-  color:#fff;
-  padding:15px;
-  border-radius:14px;
-}
-
-.option strong{
-  display:block;
-  font-size:14px;
-}
-
-.option span{
-  display:block;
-  color:#81818e;
-  font-size:11px;
-  margin-top:4px;
-}
-
-/* TOAST */
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:92px;
-  transform:translateX(-50%) translateY(20px);
-  background:#f2f2f5;
-  color:#09090d;
-  padding:11px 17px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:300;
-  white-space:nowrap;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-
-/* MOBILE */
-
-@media(max-width:420px){
-
-  .content{
-    padding:14px;
-    padding-bottom:100px;
-  }
-
-  .hero{
-    min-height:390px;
-    padding:22px;
-  }
-
-  .hero h1{
-    font-size:39px;
-  }
-
-  .age-grid,
-  .feature-grid{
-    gap:8px;
-  }
-
-  .age-card{
-    padding:14px;
-  }
-
-  .video-placeholder{
-    height:350px;
-  }
-
-}
-
-@media(min-width:621px){
-
-  body{
-    background:
-      radial-gradient(circle at 20% 20%,rgba(100,60,255,.08),transparent 35%),
-      #030307;
-  }
-
-  .app{
-    box-shadow:0 0 80px rgba(0,0,0,.55);
-  }
-
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050509;color:#fff;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:620px;margin:auto;min-height:100vh;background:#09090d}
+.top{height:68px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;background:#0d0d14;border-bottom:1px solid #252532;position:sticky;top:0;z-index:5}
+.logo{font-size:29px;font-weight:900;letter-spacing:4px}.logo b{color:#e33dff}
+.icons{display:flex;gap:9px}
+.icon{width:40px;height:40px;border:0;border-radius:50%;background:#181821;color:#fff}
+.content{padding:18px 18px 100px}
+.hero{min-height:420px;padding:28px;border-radius:28px;display:flex;align-items:flex-end;background:radial-gradient(circle at 15% 15%,#7c3cff88,transparent 35%),radial-gradient(circle at 90% 25%,#ff38d266,transparent 35%),radial-gradient(circle at 50% 100%,#237aff55,transparent 40%),linear-gradient(145deg,#15152a,#080810);border:1px solid #292943}
+.badge{display:inline-block;padding:7px 12px;border:1px solid #ffffff22;border-radius:999px;background:#ffffff12;font-size:12px;font-weight:700;margin-bottom:15px}
+.hero h1{font-size:45px;line-height:1;letter-spacing:-2px}
+.grad{background:linear-gradient(90deg,#e33dff,#7b6cff,#39a7ff);-webkit-background-clip:text;color:transparent}
+.hero p{margin-top:13px;color:#c6c6d2;line-height:1.55}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.primary,.secondary{padding:13px 19px;border-radius:14px;color:#fff;font-weight:800}
+.primary{border:0;background:linear-gradient(135deg,#e33dff,#675cff)}
+.secondary{border:1px solid #343447;background:#15151f}
+.section{margin-top:20px}
+.title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.title h2{font-size:20px}.title span{font-size:12px;color:#888895}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{padding:18px;border:1px solid #292937;border-radius:20px;background:#111119}
+.age{min-height:145px}
+.blue{background:radial-gradient(circle at 100% 0%,#3278ff40,transparent 50%),#10121c}
+.purple{background:radial-gradient(circle at 100% 0%,#be37ff40,transparent 50%),#15101c}
+.bigicon{font-size:28px;margin-bottom:9px}
+.card h3{margin-bottom:6px}.card p{font-size:12px;color:#9696a5;line-height:1.45}
+.challenge{padding:20px;border-radius:24px;border:1px solid #302b42;background:linear-gradient(135deg,#e33dff1f,#495bff17),#111119}
+.challenge small{color:#f28dff;font-weight:800;letter-spacing:1px}
+.challenge h3{font-size:23px;margin:12px 0 7px}
+.challenge p{color:#aaaabd;font-size:13px;line-height:1.5}
+.mini{padding:10px 14px;border-radius:12px;border:1px solid #363647;background:#191923;color:#fff;font-size:12px;font-weight:700;margin-top:16px}
+.mini.p{border:0;background:linear-gradient(135deg,#e33dff,#596cff)}
+.video{height:380px;border-radius:22px 22px 0 0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 20%,#e33dff77,transparent 30%),radial-gradient(circle at 80% 70%,#3467ff77,transparent 35%),linear-gradient(145deg,#191324,#090910)}
+.play{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;background:#ffffff20;font-size:26px}
+.feed{overflow:hidden;padding:0}.feedbody{padding:15px}
+.creator{display:flex;gap:10px;align-items:center}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#e33dff,#526dff);font-weight:900}
+.handle{font-size:11px;color:#777786;margin-top:3px}
+.feedtext{margin-top:12px;color:#c8c8d2;font-size:13px;line-height:1.45}
+.actions{display:flex;gap:8px;margin-top:14px}
+.action{flex:1;padding:9px 4px;border:1px solid #292934;border-radius:10px;background:#181820;color:#fff;font-size:12px}
+.live{padding:18px;border-radius:22px;border:1px solid #35252e;background:radial-gradient(circle at 100% 0%,#ff366333,transparent 40%),#111119}
+.pill{background:#ff3159;padding:6px 9px;border-radius:8px;font-size:10px;font-weight:900}
+.livehead{display:flex;justify-content:space-between}
+.live p{color:#92929f;font-size:12px;line-height:1.5;margin-top:7px}
+.profile{text-align:center;padding:22px}
+.profilepic{width:80px;height:80px;margin:auto auto 12px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#e33dff,#596cff);font-size:30px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:20px;padding-top:16px;border-top:1px solid #292934}
+.stats strong{display:block}.stats span{font-size:10px;color:#777786}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:620px;width:100%;height:78px;background:#0a0a10f5;border-top:1px solid #282833;display:grid;grid-template-columns:repeat(5,1fr);z-index:10}
+.nav button{border:0;background:none;color:#737380;font-size:10px}.nav button.active{color:#fff}
+.nav i{display:block;font-style:normal;font-size:21px;margin-bottom:5px}
+.create{font-size:20px!important;color:#fff!important;background:linear-gradient(135deg,#e33dff,#586bff)!important;border-radius:10px;padding:3px 13px}
+.userbar{display:none;padding:12px 14px;margin-bottom:16px;border:1px solid #292937;border-radius:15px;background:#111119;justify-content:space-between;align-items:center}
+.userbar.show{display:flex}.userbar strong{display:block;font-size:14px}.userbar span{font-size:11px;color:#888895}
+.logout{border:1px solid #3a3a49;background:#1a1a24;color:#fff;padding:8px 11px;border-radius:10px;font-size:11px}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:flex-end;z-index:20}
+.modal.show{display:flex}
+.box{width:100%;max-width:620px;margin:auto auto 0;padding:24px;background:#12121a;border:1px solid #292936;border-radius:26px 26px 0 0;max-height:92vh;overflow:auto}
+.close{float:right;border:0;background:#22222d;color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px}
+.form{display:grid;gap:10px;margin-top:18px}
+.form label{font-size:11px;color:#aaaaba;font-weight:700}
+.form input{padding:13px;border-radius:12px;border:1px solid #30303d;background:#0c0c12;color:#fff;outline:0}
+.form input:focus{border-color:#9b5cff}
+.msg{font-size:12px;color:#ff9fb2;margin-top:12px;line-height:1.4}
+.ok{color:#8ff0bd}.switch{text-align:center;font-size:12px;color:#888895;margin-top:14px}
+.switch button{border:0;background:none;color:#d26dff;font-weight:800}
+.toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:#fff;color:#09090d;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:800;display:none;z-index:30}
+.toast.show{display:block}
+@media(max-width:420px){.content{padding:14px 14px 100px}.hero{min-height:390px;padding:22px}.hero h1{font-size:39px}.video{height:350px}.grid{gap:8px}}
 </style>
 </head>
 
@@ -765,545 +87,364 @@ button{
 
 <div class="app">
 
-<header class="topbar">
-
-<div class="logo">
-VYBE<span class="pink">.</span>
+<header class="top">
+<div class="logo">VYBE<b>.</b></div>
+<div class="icons">
+<button class="icon" onclick="toast('Search coming soon 🔎')">🔎</button>
+<button class="icon" onclick="toast('Notifications coming soon 🔔')">🔔</button>
 </div>
-
-<div class="top-actions">
-
-<button class="icon-btn" onclick="showToast('Search is coming to VYBE 🔎')">
-🔎
-</button>
-
-<button class="icon-btn" onclick="showToast('Notifications coming soon 🔔')">
-🔔
-</button>
-
-</div>
-
 </header>
-
 
 <main class="content">
 
+<div class="userbar" id="userbar">
+<div>
+<strong id="uname">VYBE User</strong>
+<span id="ugroup">Account</span>
+</div>
+<button class="logout" onclick="logout()">Log out</button>
+</div>
 
 <section class="hero">
+<div>
+<div class="badge">✦ THE NEXT SOCIAL VYBE</div>
+<h1>What's your <span class="grad">VYBE?</span></h1>
+<p>Create. Challenge. Connect. Discover a social world where watching is only the beginning.</p>
 
-<div class="hero-content">
-
-<div class="badge">
-✦ THE NEXT SOCIAL VYBE
+<div class="buttons">
+<button class="primary" onclick="openCreate()">+ Create</button>
+<button class="secondary" onclick="document.getElementById('challenge').scrollIntoView({behavior:'smooth'})">🔥 Today's Challenge</button>
 </div>
-
-<h1>
-What's your
-<span class="gradient-text">VYBE?</span>
-</h1>
-
-<p>
-Create. Challenge. Connect. Discover a social world where watching is only the beginning.
-</p>
-
-<div class="hero-buttons">
-
-<button class="primary-btn" onclick="openCreate()">
-+ Create
-</button>
-
-<button class="secondary-btn" onclick="scrollToChallenge()">
-🔥 Today's Challenge
-</button>
-
 </div>
-
-</div>
-
 </section>
 
-
 <section class="section">
-
-<div class="section-title">
+<div class="title">
 <h2>Your VYBE space</h2>
 <span>Protected communities</span>
 </div>
 
-<div class="age-grid">
+<div class="grid">
 
-<div class="age-card blue">
-
-<div class="age-icon">🔵</div>
-
+<div class="card age blue">
+<div class="bigicon">🔵</div>
 <h3>VYBE Teens</h3>
-
-<p>
-A protected space designed for users under 18 with age-appropriate discovery and safety features.
-</p>
-
+<p>Protected, age-appropriate discovery and safety features for users under 18.</p>
 </div>
 
-
-<div class="age-card purple">
-
-<div class="age-icon">🟣</div>
-
+<div class="card age purple">
+<div class="bigicon">🟣</div>
 <h3>VYBE 18+</h3>
-
-<p>
-The adult VYBE experience with LIVE, creator tools, subscriptions, gifts and more.
-</p>
-
+<p>The adult VYBE experience with LIVE, creator tools, gifts and subscriptions.</p>
 </div>
 
 </div>
-
 </section>
-
 
 <section class="section" id="challenge">
 
-<div class="section-title">
-
+<div class="title">
 <h2>🔥 Today's Challenge</h2>
-
 <span>Everyone gets a VYBE</span>
-
 </div>
 
+<div class="challenge">
 
-<div class="challenge-card">
+<small>DAILY CHALLENGE</small>
 
-<div class="challenge-top">
-
-<span class="challenge-tag">
-DAILY CHALLENGE
-</span>
-
-<span class="timer">
-08:42:17 left
-</span>
-
-</div>
-
-
-<h3>
-Show us your VYBE in 10 seconds.
-</h3>
+<h3>Show us your VYBE in 10 seconds.</h3>
 
 <p>
-Pick your sound, create your moment and challenge the community. Your audience decides what happens next.
+Pick your sound, create your moment and challenge the community.
 </p>
 
-
-<div class="challenge-actions">
-
-<button class="small-btn primary"
-onclick="showToast('Challenge camera coming next 📸')">
+<button class="mini p" onclick="needAccount('Challenge')">
 Enter Challenge
 </button>
 
-<button class="small-btn"
-onclick="showToast('Challenge details coming soon')">
+<button class="mini" onclick="toast('Entries coming next')">
 View Entries
 </button>
 
 </div>
-
-</div>
-
 </section>
-
 
 <section class="section">
 
-<div class="section-title">
-
+<div class="title">
 <h2>Why VYBE?</h2>
-
 <span>More than scrolling</span>
-
 </div>
 
+<div class="grid">
 
-<div class="feature-grid">
-
-
-<div class="feature">
-
-<div class="feature-icon">🔥</div>
-
+<div class="card">
+<div class="bigicon">🔥</div>
 <h3>Challenge Engine</h3>
-
-<p>
-Daily challenges, entries, battles, finalists and rewards.
-</p>
-
+<p>Daily challenges, entries, battles and rewards.</p>
 </div>
 
-
-<div class="feature">
-
-<div class="feature-icon">⚔️</div>
-
+<div class="card">
+<div class="bigicon">⚔️</div>
 <h3>VYBE Battles</h3>
-
-<p>
-Creators can compete while their communities participate.
-</p>
-
+<p>Creators compete while communities participate.</p>
 </div>
 
-
-<div class="feature">
-
-<div class="feature-icon">🎁</div>
-
+<div class="card">
+<div class="bigicon">🎁</div>
 <h3>Interactive Gifts</h3>
-
-<p>
-Gifts can become reactions, effects and LIVE experiences.
-</p>
-
+<p>Gifts become reactions, effects and LIVE experiences.</p>
 </div>
 
-
-<div class="feature">
-
-<div class="feature-icon">🎮</div>
-
+<div class="card">
+<div class="bigicon">🎮</div>
 <h3>Gaming LIVE</h3>
-
-<p>
-Stream gameplay, interact with viewers and build your squad.
-</p>
-
+<p>Stream gameplay and build your squad.</p>
 </div>
 
-
-<div class="feature">
-
-<div class="feature-icon">🏆</div>
-
+<div class="card">
+<div class="bigicon">🏆</div>
 <h3>VYBE Seasons</h3>
-
-<p>
-Earn points through participation, creativity and community.
-</p>
-
+<p>Earn points through creativity and participation.</p>
 </div>
 
-
-<div class="feature">
-
-<div class="feature-icon">👥</div>
-
+<div class="card">
+<div class="bigicon">👥</div>
 <h3>VYBE Squads</h3>
-
-<p>
-Teams compete together through challenges and events.
-</p>
-
+<p>Teams compete together through challenges.</p>
 </div>
 
-
 </div>
-
 </section>
-
 
 <section class="section">
 
-<div class="section-title">
-
+<div class="title">
 <h2>Discover</h2>
-
-<span>Live community preview</span>
-
+<span>Community preview</span>
 </div>
 
+<div class="card feed">
 
-<div class="feed-card">
-
-<div class="video-placeholder">
-
-<div class="play-circle">
-▶
+<div class="video">
+<div class="play">▶</div>
 </div>
 
-<div class="video-label">
-✦ VYBE ORIGINAL
-</div>
-
-</div>
-
-
-<div class="feed-info">
+<div class="feedbody">
 
 <div class="creator">
-
-<div class="avatar">
-V
-</div>
+<div class="avatar">V</div>
 
 <div>
-
-<div class="creator-name">
-VYBE Creator
+<b>VYBE Creator</b>
+<div class="handle">@vybeofficial</div>
+</div>
 </div>
 
-<div class="creator-handle">
-@vybeofficial
-</div>
-
-</div>
-
-</div>
-
-
-<p class="feed-text">
-The feed is where creators, challenges, LIVE moments and community reactions come together.
+<p class="feedtext">
+The feed brings creators, challenges, LIVE moments and community reactions together.
 </p>
 
-
-<div class="feed-actions">
-
-<button class="action"
-onclick="showToast('Liked ❤️')">
-❤️ Like
-</button>
-
-<button class="action"
-onclick="showToast('Comments coming soon 💬')">
-💬 Comment
-</button>
-
-<button class="action"
-onclick="showToast('Shared 🔗')">
-↗ Share
-</button>
-
+<div class="actions">
+<button class="action" onclick="toast('Liked ❤️')">❤️ Like</button>
+<button class="action" onclick="toast('Comments coming soon 💬')">💬 Comment</button>
+<button class="action" onclick="toast('Shared 🔗')">↗ Share</button>
 </div>
 
 </div>
-
 </div>
-
 </section>
-
 
 <section class="section">
 
-<div class="section-title">
-
+<div class="title">
 <h2>🔴 VYBE LIVE</h2>
-
-<span>Creators are coming</span>
-
+<span>Creator streaming</span>
 </div>
 
+<div class="live">
 
-<div class="live-card">
-
-<div class="live-head">
-
-<span class="live-pill">
-LIVE
-</span>
-
-<span>
-👁 0 viewers
-</span>
-
+<div class="livehead">
+<span class="pill">LIVE</span>
+<span>👁 0 viewers</span>
 </div>
 
-
-<h3>
+<h3 style="margin-top:16px">
 Your LIVE room starts here.
 </h3>
 
-
 <p>
-Gaming streams, creator LIVE sessions, viewer interaction, gifts, subscriptions and audience-controlled challenges.
+Gaming streams, viewer interaction, gifts, subscriptions and audience-controlled challenges.
 </p>
 
-
-<button class="primary-btn"
-style="margin-top:17px"
-onclick="showToast('LIVE streaming will connect next 🎥')">
+<button class="primary" style="margin-top:17px" onclick="needAccount('LIVE')">
 Start LIVE
 </button>
 
 </div>
-
 </section>
-
 
 <section class="section">
 
-<div class="profile-card">
+<div class="card profile">
 
-<div class="profile-avatar">
-V
-</div>
+<div class="profilepic">V</div>
 
-<h3>
-Your VYBE Profile
-</h3>
+<h3>Your VYBE Profile</h3>
 
 <p>
-Build your creator identity, collect achievements and grow your VYBE community.
+Build your creator identity and grow your VYBE community.
 </p>
-
 
 <div class="stats">
 
-<div class="stat">
+<div>
 <strong>0</strong>
 <span>Followers</span>
 </div>
 
-<div class="stat">
+<div>
 <strong>0</strong>
 <span>Challenges</span>
 </div>
 
-<div class="stat">
+<div>
 <strong>0</strong>
 <span>VYBE Points</span>
 </div>
 
 </div>
-
 </div>
-
 </section>
-
 
 </main>
 
+<nav class="nav">
 
-<nav class="bottom-nav">
-
-
-<button class="nav-item active"
-onclick="activateNav(this,'Home')">
-
-<span class="nav-icon">⌂</span>
-
-<span>Home</span>
-
+<button class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+<i>⌂</i>Home
 </button>
 
-
-<button class="nav-item"
-onclick="activateNav(this,'Discover')">
-
-<span class="nav-icon">◉</span>
-
-<span>Discover</span>
-
+<button onclick="toast('Discover coming next ✨')">
+<i>◉</i>Discover
 </button>
 
-
-<button class="nav-item"
-onclick="openCreate()">
-
-<span class="create-button">+</span>
-
-<span>Create</span>
-
+<button onclick="openCreate()">
+<i class="create">+</i>Create
 </button>
 
-
-<button class="nav-item"
-onclick="activateNav(this,'LIVE')">
-
-<span class="nav-icon">🔴</span>
-
-<span>LIVE</span>
-
+<button onclick="needAccount('LIVE')">
+<i>🔴</i>LIVE
 </button>
 
-
-<button class="nav-item"
-onclick="activateNav(this,'Profile')">
-
-<span class="nav-icon">◯</span>
-
-<span>Profile</span>
-
+<button onclick="openAuth('login')">
+<i>◯</i>Account
 </button>
-
 
 </nav>
 
 </div>
 
 
-<div class="modal" id="createModal">
+<!-- ACCOUNT -->
 
-<div class="modal-box">
+<div class="modal" id="auth">
 
-<button class="close" onclick="closeCreate()">
-×
-</button>
+<div class="box">
 
+<button class="close" onclick="closeAuth()">×</button>
 
-<h2>
-Create your VYBE
+<h2 id="atitle">
+Create your VYBE account
 </h2>
 
-
-<p>
-Choose what you want to create. These tools will connect to the real VYBE system as we build it.
+<p style="color:#92929f;font-size:13px;line-height:1.5;margin-top:7px">
+Your age group is assigned automatically from your date of birth.
 </p>
 
 
-<div class="modal-options">
+<form class="form" id="signup" onsubmit="signup(event)">
 
+<label>Email address</label>
+<input id="se" type="email" required>
 
-<button class="option"
-onclick="chooseCreate('Video')">
+<label>Password</label>
+<input id="sp" type="password" required minlength="6">
 
-<strong>🎬 Create a Video</strong>
+<label>Username</label>
+<input id="su" required maxlength="30">
 
-<span>
-Record a VYBE, challenge entry or response.
-</span>
+<label>Display name</label>
+<input id="sd" required maxlength="50">
 
+<label>Date of birth</label>
+<input id="dob" type="date" required>
+
+<button class="primary" id="signupBtn">
+Create Account
 </button>
 
+</form>
 
-<button class="option"
-onclick="chooseCreate('Challenge')">
 
-<strong>🔥 Create a Challenge</strong>
+<form class="form" id="login" style="display:none" onsubmit="login(event)">
 
-<span>
-Start a challenge for the VYBE community.
-</span>
+<label>Email address</label>
+<input id="le" type="email" required>
 
+<label>Password</label>
+<input id="lp" type="password" required>
+
+<button class="primary" id="loginBtn">
+Log In
 </button>
 
+</form>
 
-<button class="option"
-onclick="chooseCreate('LIVE')">
 
-<strong>🔴 Go LIVE</strong>
+<div class="msg" id="msg"></div>
 
-<span>
-Start a creator or gaming LIVE session.
-</span>
-
+<div class="switch" id="switch">
+Already have an account?
+<button type="button" onclick="openAuth('login')">
+Log in
 </button>
-
-
 </div>
 
 </div>
+</div>
 
+
+<!-- CREATE -->
+
+<div class="modal" id="create">
+
+<div class="box">
+
+<button class="close" onclick="closeCreate()">×</button>
+
+<h2>Create your VYBE</h2>
+
+<p style="color:#92929f;font-size:13px;line-height:1.5;margin-top:7px">
+Choose what you want to create.
+</p>
+
+<div class="form">
+
+<button class="secondary" onclick="needAccount('Video')">
+🎬 Create a Video
+</button>
+
+<button class="secondary" onclick="needAccount('Challenge')">
+🔥 Create a Challenge
+</button>
+
+<button class="secondary" onclick="needAccount('LIVE')">
+🔴 Go LIVE
+</button>
+
+</div>
+</div>
 </div>
 
 
@@ -1312,21 +453,32 @@ VYBE
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 
-function showToast(message){
+const SUPABASE_URL =
+"https://xmimqrrwgfxawbebmzx.supabase.co";
 
-const toast=document.getElementById("toast");
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_U1adZYSKuEBHhmIliYKMvg_eq8NZlfa";
 
-toast.textContent=message;
+let sb = null;
 
-toast.classList.add("show");
 
-clearTimeout(window.vybeToastTimer);
+function toast(message){
 
-window.vybeToastTimer=setTimeout(function(){
+let t=document.getElementById("toast");
 
-toast.classList.remove("show");
+t.textContent=message;
+
+t.classList.add("show");
+
+clearTimeout(window.toastTimer);
+
+window.toastTimer=setTimeout(function(){
+
+t.classList.remove("show");
 
 },2200);
 
@@ -1335,56 +487,354 @@ toast.classList.remove("show");
 
 function openCreate(){
 
-document.getElementById("createModal").classList.add("show");
+document.getElementById("create").classList.add("show");
 
 }
 
 
 function closeCreate(){
 
-document.getElementById("createModal").classList.remove("show");
+document.getElementById("create").classList.remove("show");
 
 }
 
 
-function chooseCreate(type){
+function closeAuth(){
+
+document.getElementById("auth").classList.remove("show");
+
+}
+
+
+function openAuth(mode){
 
 closeCreate();
 
-showToast(type+" creation will connect next ✨");
+let signupForm=document.getElementById("signup");
+let loginForm=document.getElementById("login");
+let title=document.getElementById("atitle");
+let switchBox=document.getElementById("switch");
+
+document.getElementById("msg").textContent="";
+
+document.getElementById("auth").classList.add("show");
+
+
+if(mode==="login"){
+
+signupForm.style.display="none";
+
+loginForm.style.display="grid";
+
+title.textContent="Welcome back to VYBE";
+
+switchBox.innerHTML=
+'Need an account? <button type="button" onclick="openAuth(\'signup\')">Create one</button>';
+
+}else{
+
+signupForm.style.display="grid";
+
+loginForm.style.display="none";
+
+title.textContent="Create your VYBE account";
+
+switchBox.innerHTML=
+'Already have an account? <button type="button" onclick="openAuth(\'login\')">Log in</button>';
+
+}
 
 }
 
 
-function scrollToChallenge(){
+function showMessage(text,success){
 
-const section=document.getElementById("challenge");
+let box=document.getElementById("msg");
 
-if(section){
+box.textContent=text;
 
-section.scrollIntoView({
-behavior:"smooth",
-block:"start"
+box.className=success ? "msg ok" : "msg";
+
+}
+
+
+async function signup(event){
+
+event.preventDefault();
+
+if(!sb){
+
+showMessage("Account service unavailable. Refresh and try again.");
+
+return;
+
+}
+
+let button=document.getElementById("signupBtn");
+
+button.disabled=true;
+
+button.textContent="Creating...";
+
+
+try{
+
+let email=document.getElementById("se").value.trim();
+
+let password=document.getElementById("sp").value;
+
+let username=document.getElementById("su").value.trim().toLowerCase();
+
+let display=document.getElementById("sd").value.trim();
+
+let dob=document.getElementById("dob").value;
+
+
+let result=await sb.auth.signUp({
+
+email:email,
+
+password:password,
+
+options:{
+
+data:{
+
+username:username,
+
+display_name:display,
+
+date_of_birth:dob
+
+}
+
+}
+
 });
 
+
+if(result.error){
+
+throw result.error;
+
+}
+
+
+if(result.data.session){
+
+showMessage("Welcome to VYBE! Account created.",true);
+
+await loadUser();
+
+setTimeout(closeAuth,700);
+
+}else{
+
+showMessage(
+"Account created. Check your email to confirm it, then log in.",
+true
+);
+
+}
+
+}catch(error){
+
+showMessage(error.message || "Could not create account.");
+
+}finally{
+
+button.disabled=false;
+
+button.textContent="Create Account";
+
 }
 
 }
 
 
-function activateNav(button,name){
+async function login(event){
 
-document.querySelectorAll(".nav-item").forEach(function(item){
+event.preventDefault();
 
-item.classList.remove("active");
+if(!sb){
+
+showMessage("Account service unavailable. Refresh and try again.");
+
+return;
+
+}
+
+let button=document.getElementById("loginBtn");
+
+button.disabled=true;
+
+button.textContent="Logging in...";
+
+
+try{
+
+let result=await sb.auth.signInWithPassword({
+
+email:document.getElementById("le").value.trim(),
+
+password:document.getElementById("lp").value
 
 });
 
-button.classList.add("active");
 
-if(name!=="Home"){
+if(result.error){
 
-showToast(name+" section coming next ✨");
+throw result.error;
+
+}
+
+
+await loadUser();
+
+showMessage("You're logged in.",true);
+
+setTimeout(closeAuth,700);
+
+
+}catch(error){
+
+showMessage(error.message || "Login failed.");
+
+}finally{
+
+button.disabled=false;
+
+button.textContent="Log In";
+
+}
+
+}
+
+
+async function loadUser(){
+
+if(!sb)return;
+
+let result=await sb.auth.getSession();
+
+let session=result.data.session;
+
+if(!session){
+
+document.getElementById("userbar").classList.remove("show");
+
+return;
+
+}
+
+let user=session.user;
+
+let name=
+user.user_metadata?.display_name ||
+user.user_metadata?.username ||
+"VYBE User";
+
+let group="VYBE account";
+
+
+let profile=await sb
+.from("profiles")
+.select("display_name,username,age_group")
+.eq("id",user.id)
+.maybeSingle();
+
+
+if(profile.data){
+
+name=
+profile.data.display_name ||
+profile.data.username ||
+name;
+
+group=
+profile.data.age_group==="under_18"
+?
+"🔵 VYBE Teens"
+:
+"🟣 VYBE 18+";
+
+}
+
+
+document.getElementById("uname").textContent=name;
+
+document.getElementById("ugroup").textContent=group;
+
+document.getElementById("userbar").classList.add("show");
+
+}
+
+
+async function logout(){
+
+if(sb){
+
+await sb.auth.signOut();
+
+}
+
+document.getElementById("userbar").classList.remove("show");
+
+toast("Logged out 👋");
+
+}
+
+
+async function needAccount(feature){
+
+closeCreate();
+
+if(!sb){
+
+openAuth("signup");
+
+return;
+
+}
+
+let result=await sb.auth.getSession();
+
+if(result.data.session){
+
+toast(feature+" creation is the next VYBE build step ✨");
+
+}else{
+
+openAuth("signup");
+
+}
+
+}
+
+
+function init(){
+
+try{
+
+sb=window.supabase.createClient(
+
+SUPABASE_URL,
+
+SUPABASE_PUBLISHABLE_KEY
+
+);
+
+loadUser();
+
+sb.auth.onAuthStateChange(function(){
+
+setTimeout(loadUser,0);
+
+});
+
+}catch(error){
+
+console.error(error);
 
 }
 
@@ -1393,9 +843,13 @@ showToast(name+" section coming next ✨");
 
 document.addEventListener("click",function(event){
 
-const modal=document.getElementById("createModal");
+if(event.target.id==="auth"){
 
-if(event.target===modal){
+closeAuth();
+
+}
+
+if(event.target.id==="create"){
 
 closeCreate();
 
@@ -1404,7 +858,7 @@ closeCreate();
 });
 
 
-console.log("VYBE loaded successfully.");
+init();
 
 </script>
 
