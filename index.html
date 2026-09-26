@@ -559,37 +559,52 @@ header{
 
 </div>
 
-
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-function showPage(name){
+  const pages = document.querySelectorAll(".page");
+  const buttons = document.querySelectorAll(".nav-btn");
 
-  document
-    .querySelectorAll(".page")
-    .forEach(function(page){
+  function showPage(name) {
+
+    pages.forEach(function(page) {
       page.classList.remove("active");
     });
 
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(function(button){
+    buttons.forEach(function(button) {
       button.classList.remove("active");
     });
 
-  const page =
-    document.getElementById("page-" + name);
+    const target = document.getElementById("page-" + name);
 
-  if(page){
-    page.classList.add("active");
+    if (target) {
+      target.classList.add("active");
+    }
+
+    window.scrollTo(0, 0);
   }
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
+  buttons.forEach(function(button) {
 
+    button.addEventListener("click", function() {
+
+      const text = button.innerText.toLowerCase();
+
+      if (text.includes("home")) showPage("home");
+      else if (text.includes("discover")) showPage("discover");
+      else if (text.includes("create")) showPage("create");
+      else if (text.includes("live")) showPage("live");
+      else if (text.includes("profile")) showPage("profile");
+
+    });
+
+  });
+
+});
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
