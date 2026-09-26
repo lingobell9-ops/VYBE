@@ -7,6 +7,14 @@
 <title>VYBE | What's Your VYBE Today?</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://olttlqjgzxtvriyoipe.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2uhP7sc-G8MG-tJfNpH6GQ_6z4uaDZC";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY);
+</script>
 
 <style>
 :root{
