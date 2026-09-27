@@ -291,6 +291,791 @@ function renderFeed(){
     </article>
   `).join('')}`;
 }
+/* =========================
+   VYBE FYP ENGINE
+   ========================= */
+
+(function(){
+
+  if(window._VYBE_FYP_INSTALLED)return;
+  window._VYBE_FYP_INSTALLED=true;
+
+  const fypStyle=document.createElement('style');
+  fypStyle.textContent=`
+    #vybeFypScreen{
+      position:fixed;
+      inset:0;
+      z-index:99999;
+      background:#050507;
+      display:none;
+      overflow:hidden;
+    }
+
+    #vybeFypScreen.active{
+      display:block;
+    }
+
+    #vybeFypTop{
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px;
+      background:linear-gradient(rgba(0,0,0,.65),transparent);
+      pointer-events:none;
+    }
+
+    #vybeFypTop button{
+      pointer-events:auto;
+      border:0;
+      color:#fff;
+      background:rgba(0,0,0,.55);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:14px;
+      padding:10px 14px;
+      font-weight:700;
+    }
+
+    #vybeFypFeed{
+      width:100%;
+      height:100%;
+      overflow-y:auto;
+      scroll-snap-type:y mandatory;
+      scrollbar-width:none;
+    }
+
+    #vybeFypFeed::-webkit-scrollbar{
+      display:none;
+    }
+
+    .vybe-fyp-item{
+      position:relative;
+      width:100%;
+      height:100dvh;
+      min-height:100vh;
+      scroll-snap-align:start;
+      background:#000;
+      overflow:hidden;
+    }
+
+    .vybe-fyp-video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      background:#000;
+    }
+
+    .vybe-fyp-gradient{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(
+          transparent 40%,
+          rgba(0,0,0,.15) 55%,
+          rgba(0,0,0,.88) 100%
+        );
+    }
+
+    .vybe-fyp-info{
+      position:absolute;
+      left:16px;
+      right:90px;
+      bottom:24px;
+      color:#fff;
+      z-index:3;
+    }
+
+    .vybe-fyp-user{
+      font-size:17px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .vybe-fyp-caption{
+      font-size:15px;
+      line-height:1.4;
+      margin-bottom:9px;
+    }
+
+    .vybe-fyp-sound{
+      font-size:13px;
+      color:#ddd;
+    }
+
+    .vybe-fyp-actions{
+      position:absolute;
+      right:14px;
+      bottom:25px;
+      z-index:4;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .vybe-fyp-action{
+      width:52px;
+      height:52px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.58);
+      color:#fff;
+      font-size:22px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter:blur(10px);
+    }
+
+    .vybe-fyp-action small{
+      font-size:9px;
+      margin-top:2px;
+    }
+
+    .vybe-fyp-create{
+      position:absolute;
+      right:14px;
+      top:75px;
+      z-index:5;
+      width:52px;
+      height:52px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(0,0,0,.58);
+      color:#fff;
+      font-size:24px;
+    }
+
+    #vybeFypUpload{
+      display:none;
+    }
+
+    #vybeFypLoading{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-size:17px;
+    }
+
+    .vybe-fyp-empty{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:#fff;
+      padding:30px;
+    }
+
+    .vybe-fyp-empty h2{
+      margin-bottom:8px;
+    }
+
+    .vybe-fyp-empty button{
+      margin-top:18px;
+      border:0;
+      border-radius:14px;
+      padding:13px 20px;
+      font-weight:800;
+    }
+
+    @media(max-width:700px){
+      .vybe-fyp-info{
+        bottom:20px;
+      }
+
+      .vybe-fyp-actions{
+        right:10px;
+        bottom:20px;
+      }
+
+      .vybe-fyp-action{
+        width:48px;
+        height:48px;
+      }
+    }
+  `;
+
+  document.head.appendChild(fypStyle);
+
+  const screen=document.createElement('div');
+  screen.id='vybeFypScreen';
+
+  screen.innerHTML=`
+    <div id="vybeFypTop">
+      <button onclick="closeVYBEFYP()">✕ Close</button>
+      <strong>VYBE FYP</strong>
+    </div>
+
+    <button
+      class="vybe-fyp-create"
+      onclick="document.getElementById('vybeFypUpload').click()"
+      title="Upload video"
+    >＋</button>
+
+    <input
+      id="vybeFypUpload"
+      type="file"
+      accept="video/*"
+      onchange="uploadVYBEFYPVideo(this)"
+    >
+
+    <div id="vybeFypFeed">
+      <div id="vybeFypLoading">Loading VYBEs...</div>
+    </div>
+  `;
+
+  document.body.appendChild(screen);
+
+  window.openVYBEFYP=async function(){
+    if(!state.user){
+      openAuthModal('login');
+      return;
+    }
+
+    screen.classList.add('active');
+    document.body.style.overflow='hidden';
+
+    await loadVYBEFYP();
+  };
+
+  window.closeVYBEFYP=function(){
+    document.querySelectorAll('#vybeFypFeed video').forEach(v=>{
+      try{v.pause();}catch(e){}
+    });
+
+    screen.classList.remove('active');
+    document.body.style.overflow='';
+  };
+
+  window.loadVYBEFYP=async function(){
+
+    const feed=document.getElementById('vybeFypFeed');
+
+    feed.innerHTML=`<div id="vybeFypLoading">Loading VYBEs...</div>`;
+
+    try{
+
+      const {data,error}=await sb.rpc(
+        'get_fyp_videos',
+        {p_limit:50}
+      );
+
+      if(error)throw error;
+
+      const videos=data||[];
+
+      if(!videos.length){
+
+        feed.innerHTML=`
+          <div class="vybe-fyp-empty">
+            <h2>Your FYP is waiting 🎬</h2>
+            <p>Be one of the first creators to upload a VYBE video.</p>
+            <button onclick="document.getElementById('vybeFypUpload').click()">
+              Upload your first video
+            </button>
+          </div>
+        `;
+
+        return;
+      }
+
+      feed.innerHTML=videos.map(v=>`
+
+        <article
+          class="vybe-fyp-item"
+          data-video-id="${esc(v.id)}"
+        >
+
+          <video
+            class="vybe-fyp-video"
+            src="${esc(v.video_url)}"
+            ${v.thumbnail_url
+              ? `poster="${esc(v.thumbnail_url)}"`
+              : ''
+            }
+            playsinline
+            loop
+            preload="metadata"
+          ></video>
+
+          <div class="vybe-fyp-gradient"></div>
+
+          <div class="vybe-fyp-info">
+
+            <div class="vybe-fyp-user">
+              @VYBE Creator
+            </div>
+
+            <div class="vybe-fyp-caption">
+              ${esc(v.caption||'')}
+            </div>
+
+            ${
+              v.sound_name
+              ? `<div class="vybe-fyp-sound">
+                   ♫ ${esc(v.sound_name)}
+                 </div>`
+              : ''
+            }
+
+          </div>
+
+          <div class="vybe-fyp-actions">
+
+            <button
+              class="vybe-fyp-action"
+              onclick="likeVYBEVideo('${v.id}')"
+            >
+              ❤️
+              <small>${v.likes_count||0}</small>
+            </button>
+
+            <button
+              class="vybe-fyp-action"
+              onclick="commentVYBEVideo('${v.id}')"
+            >
+              💬
+              <small>${v.comments_count||0}</small>
+            </button>
+
+            <button
+              class="vybe-fyp-action"
+              onclick="shareVYBEVideo('${v.id}')"
+            >
+              ↗️
+              <small>${v.shares_count||0}</small>
+            </button>
+
+            <button
+              class="vybe-fyp-action"
+              onclick="giftVYBEVideo('${v.id}')"
+            >
+              🎁
+            </button>
+
+          </div>
+
+        </article>
+
+      `).join('');
+
+      setupVYBEFYPObserver();
+
+    }catch(e){
+
+      console.error(e);
+
+      feed.innerHTML=`
+        <div class="vybe-fyp-empty">
+          <h2>FYP couldn't load</h2>
+          <p>${esc(e.message||'Unknown error')}</p>
+          <button onclick="loadVYBEFYP()">Try again</button>
+        </div>
+      `;
+    }
+  };
+
+  function setupVYBEFYPObserver(){
+
+    const videos=document.querySelectorAll(
+      '#vybeFypFeed .vybe-fyp-video'
+    );
+
+    const observer=new IntersectionObserver(
+      entries=>{
+
+        entries.forEach(entry=>{
+
+          const video=entry.target;
+          const item=video.closest('.vybe-fyp-item');
+
+          if(entry.isIntersecting && entry.intersectionRatio>=0.7){
+
+            videos.forEach(other=>{
+              if(other!==video){
+                try{other.pause();}catch(e){}
+              }
+            });
+
+            video.muted=false;
+
+            video.play().catch(()=>{
+              video.muted=true;
+              video.play().catch(()=>{});
+            });
+
+            const id=item?.dataset?.videoId;
+
+            if(id){
+              recordVYBEView(id,video);
+            }
+
+          }else{
+
+            try{video.pause();}catch(e){}
+
+          }
+
+        });
+
+      },
+      {threshold:[0.7]}
+    );
+
+    videos.forEach(video=>observer.observe(video));
+  }
+
+  async function recordVYBEView(videoId,video){
+
+    if(!state.user)return;
+
+    try{
+
+      await sb.rpc(
+        'record_video_view',
+        {
+          p_video_id:videoId,
+          p_watch_seconds:Number(video.currentTime||0),
+          p_completed:false
+        }
+      );
+
+    }catch(e){
+      console.error(e);
+    }
+  }
+
+  window.likeVYBEVideo=async function(videoId){
+
+    if(!state.user){
+      openAuthModal('login');
+      return;
+    }
+
+    try{
+
+      const {data,error}=await sb
+        .from('video_likes')
+        .select('id')
+        .eq('video_id',videoId)
+        .eq('user_id',state.user.id)
+        .maybeSingle();
+
+      if(error)throw error;
+
+      if(data){
+
+        await sb
+          .from('video_likes')
+          .delete()
+          .eq('id',data.id);
+
+      }else{
+
+        await sb
+          .from('video_likes')
+          .insert({
+            video_id:videoId,
+            user_id:state.user.id
+          });
+
+      }
+
+      loadVYBEFYP();
+
+    }catch(e){
+
+      console.error(e);
+      toast('Could not update like.');
+
+    }
+  };
+
+  window.commentVYBEVideo=function(videoId){
+
+    if(!state.user){
+      openAuthModal('login');
+      return;
+    }
+
+    openModal(`
+      <h2>Comment on VYBE</h2>
+
+      <textarea
+        id="vybeVideoComment"
+        class="field"
+        placeholder="Write a comment..."
+      ></textarea>
+
+      <div class="modal-actions">
+
+        <button
+          class="primary"
+          onclick="submitVYBEComment('${videoId}')"
+        >
+          Post comment
+        </button>
+
+        <button
+          class="secondary"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+      </div>
+    `);
+  };
+
+  window.submitVYBEComment=async function(videoId){
+
+    const content=
+      document.getElementById('vybeVideoComment')
+      ?.value.trim()||'';
+
+    if(!content){
+      toast('Write a comment first.');
+      return;
+    }
+
+    try{
+
+      const {error}=await sb
+        .from('video_comments')
+        .insert({
+          video_id:videoId,
+          user_id:state.user.id,
+          content:content
+        });
+
+      if(error)throw error;
+
+      closeModal();
+      toast('Comment posted.');
+      loadVYBEFYP();
+
+    }catch(e){
+
+      console.error(e);
+      toast('Could not post comment.');
+
+    }
+  };
+
+  window.shareVYBEVideo=async function(videoId){
+
+    if(!state.user){
+      openAuthModal('login');
+      return;
+    }
+
+    try{
+
+      await sb
+        .from('video_shares')
+        .insert({
+          video_id:videoId,
+          user_id:state.user.id
+        });
+
+    }catch(e){
+      console.error(e);
+    }
+
+    try{
+
+      if(navigator.share){
+
+        await navigator.share({
+          title:'VYBE',
+          text:'Check out this VYBE video!'
+        });
+
+      }else{
+
+        await navigator.clipboard.writeText(
+          location.href
+        );
+
+        toast('VYBE link copied.');
+
+      }
+
+    }catch(e){}
+
+    loadVYBEFYP();
+  };
+
+  window.giftVYBEVideo=function(videoId){
+
+    if(!state.user){
+      openAuthModal('login');
+      return;
+    }
+
+    toast('VYBE Gifts are coming to this video next.');
+
+  };
+
+  window.uploadVYBEFYPVideo=async function(input){
+
+    const file=input?.files?.[0];
+
+    if(!file)return;
+
+    if(!state.user){
+      toast('Please log in first.');
+      return;
+    }
+
+    if(!file.type.startsWith('video/')){
+      toast('Please choose a video file.');
+      return;
+    }
+
+    if(file.size>250*1024*1024){
+      toast('Video must be smaller than 250 MB.');
+      input.value='';
+      return;
+    }
+
+    toast('Uploading your VYBE...');
+
+    try{
+
+      const ext=
+        (file.name.split('.').pop()||'mp4')
+        .toLowerCase();
+
+      const path=
+        state.user.id+
+        '/' +
+        crypto.randomUUID()+
+        '.'+
+        ext;
+
+      const upload=await sb
+        .storage
+        .from('videos')
+        .upload(path,file,{
+          cacheControl:'3600',
+          upsert:false,
+          contentType:file.type
+        });
+
+      if(upload.error)throw upload.error;
+
+      const publicUrl=
+        sb.storage
+          .from('videos')
+          .getPublicUrl(path)
+          .data
+          .publicUrl;
+
+      const caption=
+        prompt('Write a caption for your VYBE video:')||'';
+
+      const {error}=await sb
+        .from('videos')
+        .insert({
+          user_id:state.user.id,
+          video_url:publicUrl,
+          caption:caption,
+          visibility:'public'
+        });
+
+      if(error)throw error;
+
+      input.value='';
+
+      toast('VYBE video uploaded successfully.');
+
+      await loadVYBEFYP();
+
+    }catch(e){
+
+      console.error(e);
+
+      toast(
+        'Video upload failed: '+
+        (e.message||'Unknown error')
+      );
+
+    }
+  };
+
+  function addFYPButton(){
+
+    if(document.getElementById('vybeFypNavButton'))return;
+
+    const candidates=[
+      ...document.querySelectorAll('button'),
+      ...document.querySelectorAll('[role="button"]')
+    ];
+
+    const home=candidates.find(el=>{
+      const t=(el.textContent||'').trim().toLowerCase();
+      return t==='home'||t.includes('home');
+    });
+
+    if(!home)return;
+
+    const btn=home.cloneNode(true);
+
+    btn.id='vybeFypNavButton';
+    btn.innerHTML='▶ FYP';
+
+    btn.onclick=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      openVYBEFYP();
+    };
+
+    home.parentNode.insertBefore(btn,home.nextSibling);
+  }
+
+  function startFYPNavWatcher(){
+
+    addFYPButton();
+
+    const observer=new MutationObserver(()=>{
+      addFYPButton();
+    });
+
+    observer.observe(document.body,{
+      childList:true,
+      subtree:true
+    });
+
+    setTimeout(addFYPButton,500);
+    setTimeout(addFYPButton,1500);
+    setTimeout(addFYPButton,3000);
+  }
+
+  if(document.readyState==='loading'){
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      startFYPNavWatcher
+    );
+
+  }else{
+
+    startFYPNavWatcher();
+
+  }
+
+})();
 </script>
 </body>
 </html>
