@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#08080d">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07070b">
 
 <title>VYBE | Your World. Your People. Your Story.</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   margin:0;
@@ -16,78 +17,188 @@
 
 :root{
   --bg:#07070b;
-  --card:#111118;
-  --card2:#181820;
+  --panel:#111118;
+  --panel2:#171720;
+  --line:#292936;
   --text:#ffffff;
   --muted:#9b9ba8;
   --pink:#ff2bd6;
   --purple:#8b5cff;
   --blue:#25c8ff;
-  --line:#292933;
+  --green:#39e58c;
+  --red:#ff4f6d;
+}
+
+html,
+body{
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
 }
 
 body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  min-height:100vh;
+  overflow-x:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
 }
 
 button{
-  border:0;
   cursor:pointer;
-  color:white;
-  font:inherit;
+  color:#fff;
+  border:0;
 }
 
 .app{
   min-height:100vh;
-  padding-bottom:82px;
+  padding-bottom:84px;
 }
 
-header{
-  position:sticky;
-  top:0;
-  z-index:20;
+.topbar{
   height:64px;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:50;
+
+  background:rgba(7,7,11,.92);
+  backdrop-filter:blur(18px);
+
+  border-bottom:1px solid var(--line);
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   padding:0 18px;
-  background:rgba(7,7,11,.94);
-  border-bottom:1px solid var(--line);
-  backdrop-filter:blur(15px);
 }
 
 .logo{
-  font-size:27px;
-  font-weight:900;
+  font-weight:1000;
+  font-size:28px;
   letter-spacing:2px;
-  background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--pink),
+      var(--purple),
+      var(--blue)
+    );
+
   -webkit-background-clip:text;
   color:transparent;
 }
 
-.header-actions{
+.top-actions{
   display:flex;
-  gap:10px;
+  gap:8px;
 }
 
-.icon-btn{
+.icon{
   width:40px;
   height:40px;
-  border-radius:50%;
-  background:var(--card2);
+
+  border-radius:12px;
+
+  background:var(--panel2);
   border:1px solid var(--line);
+}
+
+.layout{
+  display:grid;
+
+  grid-template-columns:
+    230px
+    minmax(0,760px)
+    230px;
+
+  gap:18px;
+
+  max-width:1250px;
+  margin:auto;
+
+  padding:
+    84px
+    18px
+    20px;
+}
+
+.sidebar,
+.rightbar{
+  position:sticky;
+  top:82px;
+  height:max-content;
+}
+
+.nav-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.nav-item{
+  background:transparent;
+  border:1px solid transparent;
+
+  border-radius:14px;
+
+  padding:12px;
+
+  text-align:left;
+
+  color:var(--muted);
+
   display:flex;
   align-items:center;
-  justify-content:center;
+  gap:11px;
+}
+
+.nav-item.active,
+.nav-item:hover{
+  background:var(--panel);
+  border-color:var(--line);
+  color:#fff;
+}
+
+.nav-icon{
+  width:26px;
+  text-align:center;
+  font-size:19px;
+}
+
+.brand-card,
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+
+.brand-card{
+  padding:16px;
+  margin-bottom:14px;
+}
+
+.brand-card p,
+.muted{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.card{
+  padding:18px;
+  margin-bottom:14px;
 }
 
 .page{
   display:none;
-  min-height:calc(100vh - 146px);
-  padding:18px;
 }
 
 .page.active{
@@ -95,698 +206,4021 @@ header{
 }
 
 .hero{
-  min-height:430px;
-  border-radius:26px;
   padding:28px;
+
+  border-radius:24px;
+
+  min-height:360px;
+
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255,43,214,.28),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(37,200,255,.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #171021,
+      #09090e 70%
+    );
+
+  border:1px solid var(--line);
+
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
-  background:
-    radial-gradient(circle at 80% 20%,rgba(255,43,214,.35),transparent 35%),
-    radial-gradient(circle at 20% 30%,rgba(37,200,255,.25),transparent 35%),
-    linear-gradient(145deg,#15101f,#09090e 70%);
-  border:1px solid var(--line);
-  overflow:hidden;
 }
 
 .hero h1{
-  font-size:42px;
-  line-height:1;
-  margin-bottom:14px;
+  font-size:44px;
+  line-height:1.02;
 }
 
-.gradient-text{
-  background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));
+.grad{
+  background:
+    linear-gradient(
+      90deg,
+      var(--pink),
+      var(--purple),
+      var(--blue)
+    );
+
   -webkit-background-clip:text;
   color:transparent;
 }
 
 .hero p{
-  color:#d0d0d9;
-  line-height:1.5;
-  max-width:520px;
+  max-width:560px;
+
+  color:#d2d2dc;
+
+  line-height:1.55;
+
+  margin-top:14px;
 }
 
-.btn{
-  margin-top:22px;
-  padding:14px 20px;
-  border-radius:14px;
+.primary{
+  background:
+    linear-gradient(
+      90deg,
+      var(--pink),
+      var(--purple)
+    );
+
+  padding:13px 18px;
+
+  border-radius:13px;
+
   font-weight:800;
-  background:linear-gradient(90deg,var(--pink),var(--purple));
-  width:max-content;
+
+  margin-top:20px;
 }
 
-.section-title{
-  font-size:25px;
-  margin:8px 0 18px;
+.secondary{
+  background:var(--panel2);
+
+  border:1px solid var(--line);
+
+  padding:11px 14px;
+
+  border-radius:12px;
+}
+
+.danger{
+  background:rgba(255,79,109,.13);
+  color:#ff8298;
+
+  border:1px solid rgba(255,79,109,.3);
+
+  padding:11px 14px;
+
+  border-radius:12px;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin:18px 0 12px;
+}
+
+.section-head h2{
+  font-size:22px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+
+  grid-template-columns:
+    repeat(2,1fr);
+
   gap:12px;
 }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-}
+.tile{
+  min-height:150px;
 
-.discovery{
-  height:180px;
+  padding:18px;
+
+  border-radius:18px;
+
+  border:1px solid var(--line);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--panel2),
+      #0d0d12
+    );
+
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
-  background:
-    radial-gradient(circle at 80% 20%,rgba(139,92,255,.4),transparent 45%),
-    var(--card);
 }
 
-.discovery strong{
-  font-size:20px;
+.tile strong{
+  font-size:18px;
 }
 
-.discovery span{
+.tile span{
   color:var(--muted);
+  font-size:13px;
   margin-top:5px;
 }
 
-.create-box{
-  min-height:320px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  border:1px dashed #3b3b49;
-}
+.feed-item{
+  padding:18px;
 
-.create-icon{
-  width:75px;
-  height:75px;
-  border-radius:24px;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:38px;
-  margin-bottom:20px;
-}
+  border-radius:18px;
 
-.live-box{
-  min-height:420px;
-  border-radius:24px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  background:
-    radial-gradient(circle,rgba(255,43,214,.25),transparent 35%),
-    #0c0c12;
+  background:var(--panel);
+
   border:1px solid var(--line);
+
+  margin-bottom:12px;
 }
 
-.live-dot{
-  display:inline-block;
-  width:10px;
-  height:10px;
-  background:#ff315d;
-  border-radius:50%;
-  margin-right:7px;
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.profile-card{
-  text-align:center;
-  padding:28px 18px;
+.between{
+  justify-content:space-between;
 }
 
 .avatar{
-  width:100px;
-  height:100px;
+  width:44px;
+  height:44px;
+
   border-radius:50%;
-  margin:0 auto 15px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:38px;
+
+  display:grid;
+  place-items:center;
+
   font-weight:900;
-  background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--pink),
+      var(--purple),
+      var(--blue)
+    );
+
+  flex:none;
 }
 
-.handle{
-  color:var(--muted);
-  margin-bottom:14px;
-}
-
-.bio{
-  color:#d1d1da;
+.feed-body{
+  margin:14px 0;
   line-height:1.5;
+}
+
+.feed-actions{
+  display:flex;
+  gap:8px;
+}
+
+.feed-actions button{
+  background:var(--panel2);
+
+  border:1px solid var(--line);
+
+  padding:9px 11px;
+
+  border-radius:11px;
+
+  color:#ddd;
+}
+
+.composer textarea,
+.field{
+  width:100%;
+
+  background:#09090e;
+
+  color:#fff;
+
+  border:1px solid var(--line);
+
+  border-radius:14px;
+
+  padding:13px;
+
+  outline:none;
+}
+
+.composer textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.composer textarea:focus,
+.field:focus{
+  border-color:var(--purple);
+}
+
+.composer-actions{
+  display:flex;
+  justify-content:flex-end;
+
+  margin-top:10px;
+}
+
+.profile-cover{
+  height:170px;
+
+  border-radius:
+    20px
+    20px
+    0
+    0;
+
+  background:
+    radial-gradient(
+      circle at 75% 30%,
+      rgba(255,43,214,.5),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #181022,
+      #0b101b
+    );
+
+  border:1px solid var(--line);
+}
+
+.profile-main{
+  margin-top:-45px;
+  padding:0 20px 20px;
+}
+
+.big-avatar{
+  width:92px;
+  height:92px;
+
+  border-radius:50%;
+
+  border:5px solid var(--bg);
+
+  display:grid;
+  place-items:center;
+
+  font-size:34px;
+  font-weight:900;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--pink),
+      var(--purple),
+      var(--blue)
+    );
 }
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  margin-top:25px;
-  border-top:1px solid var(--line);
-  padding-top:20px;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:8px;
+
+  margin:18px 0;
 }
 
-.stats strong{
-  display:block;
-  font-size:20px;
-}
+.stat{
+  background:var(--panel2);
 
-.stats span{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.profile-actions{
-  display:flex;
-  gap:10px;
-  margin-top:20px;
-}
-
-.profile-actions button{
-  flex:1;
-  padding:12px;
-  border-radius:12px;
-  background:var(--card2);
   border:1px solid var(--line);
+
+  border-radius:14px;
+
+  padding:12px;
+
+  text-align:center;
 }
 
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:82px;
-  z-index:30;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  background:rgba(9,9,13,.97);
-  border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom);
+.stat b{
+  display:block;
+  font-size:19px;
 }
 
-.nav-btn{
-  background:transparent;
+.stat span{
   color:var(--muted);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
   font-size:11px;
 }
 
-.nav-btn span:first-child{
-  font-size:22px;
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
 }
 
-.nav-btn.active{
-  color:white;
+.chip{
+  background:var(--panel2);
+
+  border:1px solid var(--line);
+
+  border-radius:999px;
+
+  padding:7px 10px;
+
+  color:#ddd;
+
+  font-size:12px;
 }
 
-.nav-btn.active span:first-child{
-  color:var(--pink);
+.feature-list{
+  display:grid;
+  gap:10px;
 }
 
-@media(min-width:700px){
-  .page{
-    max-width:900px;
-    margin:auto;
+.feature{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:14px;
+
+  border-radius:15px;
+
+  background:var(--panel2);
+
+  border:1px solid var(--line);
+}
+
+.feature-left{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.feature-icon{
+  font-size:23px;
+  width:30px;
+  text-align:center;
+}
+
+.feature small{
+  display:block;
+
+  color:var(--muted);
+
+  margin-top:3px;
+}
+
+.pill{
+  font-size:11px;
+
+  padding:5px 8px;
+
+  border-radius:999px;
+
+  background:rgba(139,92,255,.16);
+
+  color:#c9baff;
+}
+
+.right-card{
+  padding:15px;
+  margin-bottom:12px;
+}
+
+.right-card h3{
+  margin-bottom:10px;
+}
+
+.mini{
+  display:flex;
+
+  gap:10px;
+
+  padding:9px 0;
+
+  border-bottom:1px solid var(--line);
+}
+
+.mini:last-child{
+  border-bottom:0;
+}
+
+.bottom-nav{
+  display:none;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+
+  z-index:100;
+
+  background:rgba(0,0,0,.86);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:18px;
+}
+
+.modal-box{
+  width:min(460px,100%);
+
+  max-height:92vh;
+
+  overflow:auto;
+
+  background:#111118;
+
+  border:1px solid var(--line);
+
+  border-radius:22px;
+
+  padding:24px;
+
+  box-shadow:
+    0
+    30px
+    90px
+    rgba(0,0,0,.7);
+}
+
+.modal h2{
+  text-align:center;
+}
+
+.modal-sub{
+  text-align:center;
+
+  color:var(--muted);
+
+  margin:
+    8px
+    0
+    20px;
+
+  line-height:1.45;
+}
+
+.form-grid{
+  display:grid;
+  gap:11px;
+}
+
+.form-label{
+  font-size:12px;
+  color:#aaa;
+
+  margin-bottom:5px;
+
+  display:block;
+}
+
+.modal-actions{
+  display:grid;
+  gap:9px;
+  margin-top:14px;
+}
+
+.message{
+  display:none;
+
+  padding:11px;
+
+  border-radius:12px;
+
+  background:var(--panel2);
+
+  color:#ddd;
+
+  font-size:13px;
+
+  line-height:1.45;
+
+  margin-top:11px;
+}
+
+.error{
+  border:
+    1px
+    solid
+    rgba(255,79,109,.35);
+
+  background:
+    rgba(255,79,109,.08);
+}
+
+.search{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.search .field{
+  flex:1;
+}
+
+.toast{
+  position:fixed;
+
+  left:50%;
+  bottom:96px;
+
+  transform:translateX(-50%);
+
+  z-index:200;
+
+  background:#1c1c25;
+
+  border:1px solid var(--line);
+
+  padding:12px 16px;
+
+  border-radius:13px;
+
+  display:none;
+
+  max-width:90%;
+
+  text-align:center;
+}
+
+.hidden{
+  display:none!important;
+}
+
+@media(max-width:980px){
+
+  .layout{
+    grid-template-columns:
+      190px
+      minmax(0,1fr);
+  }
+
+  .rightbar{
+    display:none;
+  }
+
+}
+
+@media(max-width:700px){
+
+  .topbar{
+    height:60px;
+  }
+
+  .layout{
+    display:block;
+
+    padding:
+      76px
+      12px
+      12px;
+  }
+
+  .sidebar{
+    display:none;
+  }
+
+  .bottom-nav{
+    position:fixed;
+
+    display:grid;
+
+    grid-template-columns:
+      repeat(5,1fr);
+
+    bottom:0;
+    left:0;
+    right:0;
+
+    height:78px;
+
+    z-index:60;
+
+    background:
+      rgba(8,8,12,.97);
+
+    border-top:1px solid var(--line);
+
+    padding-bottom:
+      env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav button{
+    background:transparent;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+  }
+
+  .bottom-nav button.active{
+    color:#fff;
+  }
+
+  .bottom-nav b{
+    font-size:20px;
   }
 
   .grid{
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:
+      1fr
+      1fr;
   }
 
   .hero{
-    min-height:520px;
+    min-height:410px;
+    padding:22px;
   }
+
+  .hero h1{
+    font-size:37px;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .app{
+    padding-bottom:78px;
+  }
+
 }
+
+@media(max-width:430px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .top-actions .icon:last-child{
+    display:none;
+  }
+
+  .hero h1{
+    font-size:34px;
+  }
+
+  .profile-main{
+    padding:
+      0
+      14px
+      16px;
+  }
+
+  .feed-actions{
+    overflow:auto;
+  }
+
+  .feed-actions button{
+    white-space:nowrap;
+  }
+
+}
+
 </style>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
 <div class="app">
 
-<header>
-  <div class="logo">VYBE</div>
+<header class="topbar">
 
-  <div class="header-actions">
-    <button class="icon-btn" onclick="showPage('discover')">⌕</button>
-    <button class="icon-btn" onclick="showPage('profile')">♡</button>
+  <div class="logo">
+    VYBE
   </div>
+
+  <div class="top-actions">
+
+    <button
+      class="icon"
+      type="button"
+      onclick="openSearch()"
+    >
+      ⌕
+    </button>
+
+    <button
+      class="icon"
+      type="button"
+      onclick="showPage('notifications')"
+    >
+      ♡
+    </button>
+
+    <button
+      class="icon"
+      type="button"
+      onclick="showPage('profile')"
+    >
+      ●
+    </button>
+
+  </div>
+
 </header>
 
-<main>
 
-<section id="page-home" class="page active">
+<div class="layout">
 
-  <div class="hero">
-    <h1>
-      What's your<br>
-      <span class="gradient-text">VYBE</span> today?
-    </h1>
+<aside class="sidebar">
+
+  <div class="brand-card">
+
+    <b>VYBE</b>
 
     <p>
-      Discover people, creators, gaming, music and moments
-      that match your world.
+      Your world. Your people. Your story.
     </p>
 
-    <button class="btn" onclick="showPage('discover')">
-      Explore VYBE
-    </button>
   </div>
 
-  <h2 class="section-title">Trending VYBES</h2>
+  <nav
+    class="nav-list"
+    id="sideNav"
+  ></nav>
 
-  <div class="grid">
-    <div class="card discovery">
-      <strong>🎮 Gaming</strong>
-      <span>Find your squad</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>🎵 Music</strong>
-      <span>Discover your sound</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>✨ Creators</strong>
-      <span>Meet new creators</span>
-    </div>
-  </div>
-
-</section>
+</aside>
 
 
-<section id="page-discover" class="page">
-
-  <h2 class="section-title">Discover</h2>
-
-  <div class="grid">
-
-    <div class="card discovery">
-      <strong>🔥 Trending</strong>
-      <span>What's happening now</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>🎮 Gaming</strong>
-      <span>Players & streams</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>🎵 Music</strong>
-      <span>Sounds & creators</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>💜 VYBE 18+</strong>
-      <span>18+ community</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>🌟 VYBE Teens</strong>
-      <span>Teen community</span>
-    </div>
-
-    <div class="card discovery">
-      <strong>🏆 Challenges</strong>
-      <span>Today's challenge</span>
-    </div>
-
-  </div>
-
-</section>
+<main id="main"></main>
 
 
-<section id="page-create" class="page">
+<aside class="rightbar">
 
-  <h2 class="section-title">Create</h2>
+  <div class="card right-card">
 
-  <div class="card create-box">
+    <h3>
+      VYBE Now
+    </h3>
 
-    <div class="create-icon">＋</div>
+    <div class="mini">
 
-    <h2>Create your VYBE</h2>
-
-    <p style="color:var(--muted);margin-top:10px;">
-      Share videos, photos, gaming moments and more.
-    </p>
-
-    <button class="btn">
-      Create Post
-    </button>
-
-  </div>
-
-</section>
-
-
-<section id="page-live" class="page">
-
-  <h2 class="section-title">LIVE</h2>
-
-  <div class="live-box">
-
-    <div>
-      <div style="font-size:26px;font-weight:800;">
-        <span class="live-dot"></span>
-        VYBE LIVE
-      </div>
-
-      <p style="color:var(--muted);margin-top:12px;">
-        Live streaming is coming to VYBE.
-      </p>
-
-      <button class="btn">
-        Start LIVE
-      </button>
-    </div>
-
-  </div>
-
-</section>
-
-
-<section id="page-profile" class="page">
-
-  <div class="card profile-card">
-
-    <div class="avatar">V</div>
-
-    <h2>VYBE User</h2>
-
-    <div class="handle">@username</div>
-
-    <p class="bio">
-      Your VYBE. Your people. Your story.
-    </p>
-
-    <div class="stats">
+      <span>🔥</span>
 
       <div>
-        <strong>0</strong>
-        <span>Following</span>
-      </div>
-
-      <div>
-        <strong>0</strong>
-        <span>Followers</span>
-      </div>
-
-      <div>
-        <strong>0</strong>
-        <span>Likes</span>
+        <b>Daily Challenge</b>
+        <small class="muted">
+          Make today's VYBE
+        </small>
       </div>
 
     </div>
 
-    <div class="profile-actions">
+    <div class="mini">
 
-      <button onclick="alert('Account system coming next')">
-        Create Account
-      </button>
+      <span>🎮</span>
 
-      <button onclick="alert('Settings coming next')">
-        Settings
-      </button>
+      <div>
+        <b>Gaming Hub</b>
+        <small class="muted">
+          Play. Watch. Connect.
+        </small>
+      </div>
+
+    </div>
+
+    <div class="mini">
+
+      <span>✨</span>
+
+      <div>
+        <b>Creators</b>
+        <small class="muted">
+          Build your community
+        </small>
+      </div>
 
     </div>
 
   </div>
 
-</section>
 
-</main>
+  <div class="card right-card">
 
+    <h3>
+      Your VYBE
+    </h3>
 
-<nav class="bottom-nav">
+    <div class="mini">
 
-  <button class="nav-btn active" onclick="showPage('home')">
-    <span>⌂</span>
-    <span>Home</span>
-  </button>
+      <span>⚡</span>
 
-  <button class="nav-btn" onclick="showPage('discover')">
-    <span>◉</span>
-    <span>Discover</span>
-  </button>
+      <div>
+        <b id="rightLevel">
+          Level 1
+        </b>
 
-  <button class="nav-btn" onclick="showPage('create')">
-    <span>＋</span>
-    <span>Create</span>
-  </button>
+        <small
+          class="muted"
+          id="rightXp"
+        >
+          0 XP
+        </small>
+      </div>
 
-  <button class="nav-btn" onclick="showPage('live')">
-    <span>●</span>
-    <span>LIVE</span>
-  </button>
+    </div>
 
-  <button class="nav-btn" onclick="showPage('profile')">
-    <span>●</span>
-    <span>Profile</span>
-  </button>
+    <div class="mini">
 
-</nav>
+      <span>🪙</span>
+
+      <div>
+
+        <b id="rightCoins">
+          0 Coins
+        </b>
+
+        <small class="muted">
+          Earn and spend in VYBE
+        </small>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</aside>
 
 </div>
 
+
+<nav
+  class="bottom-nav"
+  id="bottomNav"
+></nav>
+
+
+<div id="modalRoot"></div>
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+</div>
+
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
 
-  const pages = document.querySelectorAll(".page");
-  const buttons = document.querySelectorAll(".nav-btn");
-
-  function showPage(name) {
-
-    pages.forEach(function(page) {
-      page.classList.remove("active");
-    });
-
-    buttons.forEach(function(button) {
-      button.classList.remove("active");
-    });
-
-    const target = document.getElementById("page-" + name);
-
-    if (target) {
-      target.classList.add("active");
-    }
-
-    window.scrollTo(0, 0);
-  
-
-  buttons.forEach(function(button) {
-
-    button.addEventListener("click", function() {
-
-      const text = button.innerText.toLowerCase();
-
-      if (text.includes("home")) showPage("home");
-      else if (text.includes("discover")) showPage("discover");
-      else if (text.includes("create")) showPage("create");
-      else if (text.includes("live")) showPage("live");
-      else if (text.includes("profile")) showPage("profile");
-
-    });
-
-  });
-
-});
 const SUPABASE_URL =
-"https://olttlqjgzxtvriyoipe.supabase.co";
+  "https://olttlqjgzxtvriyoipe.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_2uhP7sc-G8MG-tJfNpH6GQ_6z4uaDZC";
+  "sb_publishable_2uhP7sc-G8MG-tJfNpH6GQ_6z4uaDZC";
+
 
 const sb =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
-function openAuthModal() {
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
-  const existing =
-  document.getElementById("authModal");
 
-  if (existing) {
-    existing.remove();
+const nav = [
+
+  ["home","⌂","Home"],
+
+  ["discover","◉","Discover"],
+
+  ["create","＋","Create"],
+
+  ["live","●","LIVE"],
+
+  ["profile","●","Profile"],
+
+  ["messages","✉","Messages"],
+
+  ["challenges","🏆","Challenges"],
+
+  ["communities","👥","Communities"],
+
+  ["gaming","🎮","Gaming"],
+
+  ["music","♫","Music"],
+
+  ["events","📅","Events"],
+
+  ["notifications","♡","Notifications"],
+
+  ["wallet","🪙","Wallet"],
+
+  ["creator","★","Creator Hub"],
+
+  ["vybeplus","V+","VYBE+"],
+
+  ["ai","✦","VYBE AI"],
+
+  ["local","⌖","VYBE Local"],
+
+  ["rooms","◈","VYBE Rooms"],
+
+  ["match","♡","VYBE Match"],
+
+  ["settings","⚙","Settings"]
+
+];
+
+
+let state = {
+
+  user:null,
+
+  profile:null,
+
+  liked:{},
+
+  following:{},
+
+  coins:Number(
+    localStorage.getItem("vybe_coins") || 0
+  ),
+
+  xp:Number(
+    localStorage.getItem("vybe_xp") || 0
+  ),
+
+  posts:JSON.parse(
+    localStorage.getItem("vybe_posts") || "[]"
+  ),
+
+  theme:
+    localStorage.getItem("vybe_theme")
+    || "default"
+
+};
+
+
+function esc(value){
+
+  return String(
+    value ?? ""
+  ).replace(
+    /[&<>'"]/g,
+    function(c){
+
+      return {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "'":"&#39;",
+        '"':"&quot;"
+
+      }[c];
+
+    }
+  );
+
+}
+
+
+function initials(name){
+
+  return (
+    name
+    || "V"
+  )
+  .trim()
+  .charAt(0)
+  .toUpperCase()
+  || "V";
+
+}
+
+
+function toast(message){
+
+  const t =
+    document.getElementById(
+      "toast"
+    );
+
+  t.textContent =
+    message;
+
+  t.style.display =
+    "block";
+
+  clearTimeout(
+    window._toast
+  );
+
+  window._toast =
+    setTimeout(
+      function(){
+
+        t.style.display =
+          "none";
+
+      },
+      2600
+    );
+
+}
+
+
+function addXP(amount){
+
+  state.xp += amount;
+
+  localStorage.setItem(
+    "vybe_xp",
+    state.xp
+  );
+
+  renderRight();
+
+}
+
+
+function renderRight(){
+
+  const level =
+    Math.floor(
+      state.xp / 100
+    ) + 1;
+
+  document.getElementById(
+    "rightLevel"
+  ).textContent =
+    "Level " + level;
+
+  document.getElementById(
+    "rightXp"
+  ).textContent =
+    state.xp + " XP";
+
+  document.getElementById(
+    "rightCoins"
+  ).textContent =
+    state.coins + " Coins";
+
+}
+
+
+function showPage(name){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      function(page){
+
+        page.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+
+  const page =
+    document.getElementById(
+      "page-" + name
+    );
+
+
+  if(page){
+
+    page.classList.add(
+      "active"
+    );
+
   }
 
-  const modal =
-  document.createElement("div");
 
-  modal.id = "authModal";
+  document
+    .querySelectorAll(
+      ".nav-item,.bottom-nav button"
+    )
+    .forEach(
+      function(button){
 
-  modal.innerHTML = `
-    <div style="
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.85);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-      padding:20px;
-    ">
+        button.classList.toggle(
+          "active",
+          button.dataset.page === name
+        );
 
-      <div style="
-        width:100%;
-        max-width:420px;
-        background:#111118;
-        border:1px solid #292936;
-        border-radius:22px;
-        padding:28px;
-        color:white;
-        box-shadow:0 20px 60px rgba(0,0,0,.6);
-      ">
+      }
+    );
 
-        <h2 style="
-          margin:0 0 8px;
-          text-align:center;
-        ">
-          Create Your VYBE Account
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+function navButton(item){
+
+  return `
+
+    <button
+      type="button"
+      class="nav-item"
+      data-page="${item[0]}"
+      onclick="showPage('${item[0]}')"
+    >
+
+      <span class="nav-icon">
+        ${item[1]}
+      </span>
+
+      <span>
+        ${item[2]}
+      </span>
+
+    </button>
+
+  `;
+
+}
+
+
+function buildNav(){
+
+  document.getElementById(
+    "sideNav"
+  ).innerHTML =
+    nav
+    .map(navButton)
+    .join("");
+
+
+  const bottom =
+    nav
+    .slice(0,5)
+    .map(
+      function(item){
+
+        return `
+
+          <button
+            type="button"
+            data-page="${item[0]}"
+            onclick="showPage('${item[0]}')"
+          >
+
+            <b>
+              ${item[1]}
+            </b>
+
+            <span>
+              ${item[2]}
+            </span>
+
+          </button>
+
+        `;
+
+      }
+    )
+    .join("");
+
+
+  document.getElementById(
+    "bottomNav"
+  ).innerHTML =
+    bottom;
+
+}
+
+
+function page(
+  id,
+  title,
+  body
+){
+
+  return `
+
+    <section
+      id="page-${id}"
+      class="page"
+    >
+
+      <div class="section-head">
+
+        <h2>
+          ${title}
         </h2>
 
-        <p style="
-          text-align:center;
-          color:#aaa;
-          margin-bottom:24px;
-        ">
-          Your world. Your people. Your story.
+        <span class="pill">
+          VYBE
+        </span>
+
+      </div>
+
+      ${body}
+
+    </section>
+
+  `;
+
+}
+
+
+function featurePage(
+  id,
+  title,
+  icon,
+  description,
+  actions
+){
+
+  return page(
+    id,
+    title,
+
+    `
+
+      <div class="card">
+
+        <div class="row">
+
+          <div class="avatar">
+            ${icon}
+          </div>
+
+          <div>
+
+            <h2>
+              ${title}
+            </h2>
+
+            <p class="muted">
+              ${description}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="feature-list"
+          style="margin-top:18px"
+        >
+
+          ${actions
+            .map(
+              function(action){
+
+                return `
+
+                  <div class="feature">
+
+                    <div class="feature-left">
+
+                      <span class="feature-icon">
+                        ${action[0]}
+                      </span>
+
+                      <div>
+
+                        <b>
+                          ${action[1]}
+                        </b>
+
+                        <small>
+                          ${action[2]}
+                        </small>
+
+                      </div>
+
+                    </div>
+
+
+                    <button
+                      class="secondary"
+                      type="button"
+                      onclick="featureAction(
+                        '${id}',
+                        '${action[1].replace(
+                          /'/g,
+                          "\\'"
+                        )}'
+                      )"
+                    >
+                      Open
+                    </button>
+
+                  </div>
+
+                `;
+
+              }
+            )
+            .join("")}
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+}
+
+
+function render(){
+
+  const main =
+    document.getElementById(
+      "main"
+    );
+
+  let html = "";
+
+
+  html += page(
+    "home",
+    "Home",
+
+    `
+
+      <div class="hero">
+
+        <h1>
+
+          What's your<br>
+
+          <span class="grad">
+            VYBE
+          </span>
+
+          today?
+
+        </h1>
+
+
+        <p>
+
+          One place for short videos,
+          friends, creators, gaming,
+          LIVE, music, communities,
+          conversations and your own
+          corner of the internet.
+
         </p>
 
-        <input
-          id="authEmail"
-          type="email"
-          placeholder="Email address"
-          style="
-            width:100%;
-            padding:14px;
-            margin-bottom:12px;
-            border-radius:12px;
-            border:1px solid #333;
-            background:#08080d;
-            color:white;
-            box-sizing:border-box;
-          "
-        >
-
-        <input
-          id="authPassword"
-          type="password"
-          placeholder="Password"
-          style="
-            width:100%;
-            padding:14px;
-            margin-bottom:16px;
-            border-radius:12px;
-            border:1px solid #333;
-            background:#08080d;
-            color:white;
-            box-sizing:border-box;
-          "
-        >
 
         <button
-          onclick="createVYBEAccount()"
-          style="
-            width:100%;
-            padding:14px;
-            border:0;
-            border-radius:12px;
-            background:#7c3aed;
-            color:white;
-            font-size:16px;
-            font-weight:bold;
-          "
+          class="primary"
+          type="button"
+          onclick="showPage('discover')"
         >
-          Create Account
-        </button>
-
-        <button
-          onclick="document.getElementById('authModal').remove()"
-          style="
-            width:100%;
-            padding:12px;
-            margin-top:10px;
-            border:1px solid #333;
-            border-radius:12px;
-            background:transparent;
-            color:#aaa;
-          "
-        >
-          Cancel
+          Explore VYBE
         </button>
 
       </div>
-    </div>
-  `;
 
-  document.body.appendChild(modal);
-}async function createVYBEAccount() {
 
-  const email =
-    document.getElementById("authEmail").value.trim();
+      <div class="section-head">
 
-  const password =
-    document.getElementById("authPassword").value;
+        <h2>
+          Trending VYBES
+        </h2>
 
-  if (!email || !password) {
-    alert("Please enter your email and password.");
-    return;
-  }
+        <button
+          class="secondary"
+          type="button"
+          onclick="showPage('challenges')"
+        >
+          Today's Challenge
+        </button>
 
-  if (password.length < 6) {
-    alert("Your password must be at least 6 characters.");
-    return;
-  }
+      </div>
 
-  const button =
-    document.querySelector(
-      '#authModal button[onclick="createVYBEAccount()"]'
+
+      <div id="feed"></div>
+
+    `
+
+  );
+
+
+  html += page(
+    "discover",
+    "Discover",
+
+    `
+
+      <div class="search">
+
+        <input
+          class="field"
+          id="discoverSearch"
+          placeholder="Search people, VYBEs, creators, communities..."
+        >
+
+        <button
+          class="primary"
+          style="margin:0"
+          type="button"
+          onclick="runSearch()"
+        >
+          Search
+        </button>
+
+      </div>
+
+
+      <div class="grid">
+
+        ${[
+
+          [
+            "🔥",
+            "Trending",
+            "What the VYBE is talking about"
+          ],
+
+          [
+            "🎮",
+            "Gaming",
+            "Streams, clips and squads"
+          ],
+
+          [
+            "🎵",
+            "Music",
+            "Sounds, playlists and artists"
+          ],
+
+          [
+            "✨",
+            "Creators",
+            "Find your people"
+          ],
+
+          [
+            "👥",
+            "Communities",
+            "Groups built around interests"
+          ],
+
+          [
+            "🏆",
+            "Challenges",
+            "Daily challenges and seasons"
+          ],
+
+          [
+            "📍",
+            "VYBE Local",
+            "Discover things around you"
+          ],
+
+          [
+            "◈",
+            "VYBE Rooms",
+            "Drop into live conversations"
+          ]
+
+        ]
+
+        .map(
+          function(item){
+
+            return `
+
+              <button
+                class="tile"
+                type="button"
+                onclick="featureAction(
+                  'discover',
+                  '${item[1]}'
+                )"
+              >
+
+                <strong>
+                  ${item[0]}
+                  ${item[1]}
+                </strong>
+
+                <span>
+                  ${item[2]}
+                </span>
+
+              </button>
+
+            `;
+
+          }
+        )
+
+        .join("")}
+
+      </div>
+
+    `
+
+  );
+
+
+  html += page(
+    "create",
+    "Create",
+
+    `
+
+      <div class="card composer">
+
+        <textarea
+          id="postText"
+          placeholder="What's your VYBE?"
+        ></textarea>
+
+
+        <div
+          class="chips"
+          style="margin-top:10px"
+        >
+
+          <span class="chip">
+            #VYBE
+          </span>
+
+          <span class="chip">
+            #Gaming
+          </span>
+
+          <span class="chip">
+            #Music
+          </span>
+
+          <span class="chip">
+            #Challenge
+          </span>
+
+        </div>
+
+
+        <div class="composer-actions">
+
+          <button
+            class="primary"
+            style="margin:0"
+            type="button"
+            onclick="createPost()"
+          >
+            Post VYBE
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="grid">
+
+        <button
+          class="tile"
+          type="button"
+          onclick="featureAction('create','Video')"
+        >
+
+          <strong>
+            🎬 Video VYBE
+          </strong>
+
+          <span>
+            Short-form video creation
+          </span>
+
+        </button>
+
+
+        <button
+          class="tile"
+          type="button"
+          onclick="featureAction('create','Photo')"
+        >
+
+          <strong>
+            📸 Photo
+          </strong>
+
+          <span>
+            Share a moment
+          </span>
+
+        </button>
+
+
+        <button
+          class="tile"
+          type="button"
+          onclick="featureAction('create','Long-form Video')"
+        >
+
+          <strong>
+            ▶ Long-form
+          </strong>
+
+          <span>
+            Build your channel
+          </span>
+
+        </button>
+
+
+        <button
+          class="tile"
+          type="button"
+          onclick="featureAction('create','Text Post')"
+        >
+
+          <strong>
+            ✍ Text
+          </strong>
+
+          <span>
+            Start a conversation
+          </span>
+
+        </button>
+
+      </div>
+
+    `
+
+  );
+
+
+  html += page(
+    "live",
+    "LIVE",
+
+    `
+
+      <div
+        class="card"
+        style="
+          min-height:350px;
+          display:grid;
+          place-items:center;
+          text-align:center;
+        "
+      >
+
+        <div>
+
+          <div
+            style="
+              font-size:30px;
+              font-weight:900;
+            "
+          >
+
+            <span style="color:var(--red)">
+              ●
+            </span>
+
+            VYBE LIVE
+
+          </div>
+
+
+          <p
+            class="muted"
+            style="margin-top:10px"
+          >
+            Gaming streams, creator lives,
+            chat, gifts and communities.
+          </p>
+
+
+          <button
+            class="primary"
+            type="button"
+            onclick="featureAction('live','Start LIVE')"
+          >
+            Start LIVE
+          </button>
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+
+  const profile =
+    state.profile || {};
+
+
+  html += page(
+    "profile",
+    "Profile",
+
+    `
+
+      <div class="profile-cover"></div>
+
+
+      <div
+        class="card"
+        style="
+          border-radius:
+            0
+            0
+            20px
+            20px;
+
+          border-top:0;
+        "
+      >
+
+        <div class="profile-main">
+
+          <div class="big-avatar">
+
+            ${initials(
+              profile.display_name
+              || "VYBE User"
+            )}
+
+          </div>
+
+
+          <div class="section-head">
+
+            <div>
+
+              <h2>
+                ${esc(
+                  profile.display_name
+                  || "VYBE User"
+                )}
+              </h2>
+
+              <p class="muted">
+                @${esc(
+                  profile.username
+                  || "username"
+                )}
+              </p>
+
+            </div>
+
+
+            <button
+              class="secondary"
+              type="button"
+              onclick="openProfileEditor()"
+            >
+              Edit Profile
+            </button>
+
+          </div>
+
+
+          <p>
+
+            ${esc(
+              profile.bio
+              || "Your VYBE. Your people. Your story."
+            )}
+
+          </p>
+
+
+          <div
+            class="chips"
+            style="margin-top:12px"
+          >
+
+            <span class="chip">
+              ${esc(
+                profile.age_group
+                || "adult"
+              )}
+            </span>
+
+            <span class="chip">
+              Creator
+            </span>
+
+            <span class="chip">
+              VYBE Member
+            </span>
+
+          </div>
+
+
+          <div class="stats">
+
+            <div class="stat">
+
+              <b>0</b>
+
+              <span>
+                Following
+              </span>
+
+            </div>
+
+
+            <div class="stat">
+
+              <b>0</b>
+
+              <span>
+                Followers
+              </span>
+
+            </div>
+
+
+            <div class="stat">
+
+              <b>0</b>
+
+              <span>
+                Likes
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>
+          Customize Your VYBE
+        </h3>
+
+
+        <p
+          class="muted"
+          style="
+            margin:
+              6px
+              0
+              14px;
+          "
+        >
+
+          Backgrounds, themes, music,
+          layouts, frames, effects,
+          widgets and earned decorations.
+
+        </p>
+
+
+        <div class="grid">
+
+          <button
+            class="tile"
+            type="button"
+            onclick="featureAction('profile','Themes')"
+          >
+
+            <strong>
+              🎨 Themes
+            </strong>
+
+            <span>
+              Make your profile yours
+            </span>
+
+          </button>
+
+
+          <button
+            class="tile"
+            type="button"
+            onclick="featureAction('profile','Music')"
+          >
+
+            <strong>
+              🎵 Profile Music
+            </strong>
+
+            <span>
+              Your sound, your space
+            </span>
+
+          </button>
+
+
+          <button
+            class="tile"
+            type="button"
+            onclick="featureAction('profile','Layouts')"
+          >
+
+            <strong>
+              ▦ Layouts
+            </strong>
+
+            <span>
+              Arrange your profile
+            </span>
+
+          </button>
+
+
+          <button
+            class="tile"
+            type="button"
+            onclick="featureAction('profile','Collectibles')"
+          >
+
+            <strong>
+              🏅 Collectibles
+            </strong>
+
+            <span>
+              Show what you've earned
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `
+
+  );
+
+
+  html += featurePage(
+    "messages",
+    "Messages",
+    "✉",
+    "Private conversations and creator/community chats.",
+
+    [
+      [
+        "💬",
+        "Direct Messages",
+        "Talk one-to-one"
+      ],
+
+      [
+        "👥",
+        "Group Chats",
+        "Chat with your people"
+      ],
+
+      [
+        "🎮",
+        "Gaming Chat",
+        "Squad conversations"
+      ],
+
+      [
+        "🔒",
+        "Privacy",
+        "Message controls"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "challenges",
+    "Daily VYBE Challenges",
+    "🏆",
+    "A daily engine for participation, XP, achievements and seasons.",
+
+    [
+      [
+        "🔥",
+        "Today's Challenge",
+        "Complete today's VYBE"
+      ],
+
+      [
+        "⚡",
+        "XP & Levels",
+        "Earn XP by participating"
+      ],
+
+      [
+        "🏅",
+        "Achievements",
+        "Collect profile achievements"
+      ],
+
+      [
+        "🌟",
+        "Seasons",
+        "Seasonal progression"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "communities",
+    "Communities",
+    "👥",
+    "Interest-based spaces for conversations, posts, events and shared identity.",
+
+    [
+      [
+        "👥",
+        "Groups",
+        "Build your community"
+      ],
+
+      [
+        "🛡",
+        "Moderation",
+        "Safety and reporting tools"
+      ],
+
+      [
+        "📌",
+        "Community Posts",
+        "Share with your group"
+      ],
+
+      [
+        "📅",
+        "Community Events",
+        "Plan together"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "gaming",
+    "Gaming Hub",
+    "🎮",
+    "Gaming profiles, streams, clips, squads and competitive community features.",
+
+    [
+      [
+        "🔴",
+        "LIVE Gaming",
+        "Watch and stream"
+      ],
+
+      [
+        "🎬",
+        "Clips",
+        "Share your best plays"
+      ],
+
+      [
+        "👾",
+        "Squads",
+        "Find your people"
+      ],
+
+      [
+        "🏆",
+        "Game Challenges",
+        "Earn XP and achievements"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "music",
+    "Music",
+    "♫",
+    "Music discovery, profile sound, playlists and creator audio features.",
+
+    [
+      [
+        "🎧",
+        "Discover",
+        "Find new sounds"
+      ],
+
+      [
+        "📀",
+        "Playlists",
+        "Build your VYBE"
+      ],
+
+      [
+        "🎵",
+        "Profile Music",
+        "Set your profile sound"
+      ],
+
+      [
+        "🎤",
+        "Creators",
+        "Music creators and artists"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "events",
+    "Events",
+    "📅",
+    "Online and local events, community meetups and creator events.",
+
+    [
+      [
+        "📅",
+        "Upcoming",
+        "See what's next"
+      ],
+
+      [
+        "＋",
+        "Create Event",
+        "Plan something"
+      ],
+
+      [
+        "👥",
+        "Community Events",
+        "Events with your people"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "notifications",
+    "Notifications",
+    "♡",
+    "Your follows, comments, messages, achievements and activity.",
+
+    [
+      [
+        "💬",
+        "Comments",
+        "People interacted with you"
+      ],
+
+      [
+        "👥",
+        "Follows",
+        "New followers"
+      ],
+
+      [
+        "🏆",
+        "Achievements",
+        "New rewards"
+      ],
+
+      [
+        "🔔",
+        "System",
+        "VYBE updates"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "wallet",
+    "Wallet",
+    "🪙",
+    "Coins, gifts, creator earnings and VYBE+ billing will live here.",
+
+    [
+      [
+        "🪙",
+        "Coins",
+        "Your VYBE balance"
+      ],
+
+      [
+        "🎁",
+        "Gifts",
+        "Support creators"
+      ],
+
+      [
+        "💰",
+        "Earnings",
+        "Creator revenue"
+      ],
+
+      [
+        "🧾",
+        "Transactions",
+        "Payment history"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "creator",
+    "Creator Hub",
+    "★",
+    "Tools for creators, analytics, monetization and community growth.",
+
+    [
+      [
+        "📊",
+        "Analytics",
+        "Understand your audience"
+      ],
+
+      [
+        "💰",
+        "Monetization",
+        "Earn from your work"
+      ],
+
+      [
+        "🎁",
+        "Gifts",
+        "Creator gifts"
+      ],
+
+      [
+        "⭐",
+        "Subscriptions",
+        "Build recurring support"
+      ],
+
+      [
+        "🛠",
+        "Creator Tools",
+        "Manage your VYBE"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "vybeplus",
+    "VYBE+",
+    "V+",
+    "Premium features, customization and enhanced creator/community tools.",
+
+    [
+      [
+        "✨",
+        "Premium Profile",
+        "More customization"
+      ],
+
+      [
+        "🎨",
+        "Exclusive Themes",
+        "Premium identity"
+      ],
+
+      [
+        "🚀",
+        "Creator Tools",
+        "Advanced features"
+      ],
+
+      [
+        "🏅",
+        "Premium Badges",
+        "Show your VYBE+"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "ai",
+    "VYBE AI",
+    "✦",
+    "AI-powered creation, discovery and assistance inside VYBE.",
+
+    [
+      [
+        "✍",
+        "Create Assistant",
+        "Help shape your content"
+      ],
+
+      [
+        "💡",
+        "Ideas",
+        "Find your next VYBE"
+      ],
+
+      [
+        "🔎",
+        "Discovery",
+        "Personalized exploration"
+      ],
+
+      [
+        "🛡",
+        "Safety Assist",
+        "Help surface safer experiences"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "local",
+    "VYBE Local",
+    "⌖",
+    "Discover local creators, communities, events and businesses.",
+
+    [
+      [
+        "📍",
+        "Nearby",
+        "What's around you"
+      ],
+
+      [
+        "📅",
+        "Local Events",
+        "Things happening nearby"
+      ],
+
+      [
+        "🏪",
+        "Local Businesses",
+        "Discover businesses"
+      ],
+
+      [
+        "👥",
+        "Local Communities",
+        "Meet local people"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "rooms",
+    "VYBE Rooms",
+    "◈",
+    "Live rooms for conversations, gaming, creators and communities.",
+
+    [
+      [
+        "🎙",
+        "Create Room",
+        "Start a room"
+      ],
+
+      [
+        "🎧",
+        "Join Room",
+        "Find a conversation"
+      ],
+
+      [
+        "🎮",
+        "Gaming Room",
+        "Talk while playing"
+      ],
+
+      [
+        "👥",
+        "Community Room",
+        "Meet your people"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "match",
+    "VYBE Match",
+    "♡",
+    "Interest-based matching for finding people and communities with shared interests. Not a dating system.",
+
+    [
+      [
+        "🎯",
+        "Interests",
+        "Choose what you like"
+      ],
+
+      [
+        "✨",
+        "Matches",
+        "Discover shared interests"
+      ],
+
+      [
+        "👥",
+        "Communities",
+        "Find your people"
+      ],
+
+      [
+        "🔒",
+        "Privacy",
+        "Control visibility"
+      ]
+    ]
+
+  );
+
+
+  html += featurePage(
+    "settings",
+    "Settings",
+    "⚙",
+    "Account, privacy, safety, notifications and personalization.",
+
+    [
+      [
+        "👤",
+        "Account",
+        "Account controls"
+      ],
+
+      [
+        "🔒",
+        "Privacy",
+        "Visibility and safety"
+      ],
+
+      [
+        "🛡",
+        "Safety",
+        "Block and report"
+      ],
+
+      [
+        "🎨",
+        "Appearance",
+        "Themes and profile style"
+      ],
+
+      [
+        "🚪",
+        "Sign Out",
+        "End this session"
+      ]
+    ]
+
+  );
+
+
+  main.innerHTML =
+    html;
+
+
+  renderFeed();
+
+  showPage("home");
+
+}
+
+
+function renderFeed(){
+
+  const box =
+    document.getElementById(
+      "feed"
     );
 
-  if (button) {
-    button.disabled = true;
-    button.innerText = "Creating Account...";
+
+  if(!box){
+    return;
   }
 
-  const { data, error } =
-    await sb.auth.signUp({
-      email: email,
-      password: password
-    });
 
-  if (error) {
+  const samples = [
 
-    if (button) {
-      button.disabled = false;
-      button.innerText = "Create Account";
+    {
+      name:"VYBE",
+      handle:"@vybe",
+      text:
+        "Your world. Your people. Your story. Welcome to the VYBE."
+    },
+
+    {
+      name:"Gaming Hub",
+      handle:"@gaming",
+      text:
+        "Who is ready for today's challenge? 🎮🔥"
     }
 
-    alert(error.message);
-    return;
-  }
+  ];
 
-  if (data.user) {
 
-    document.getElementById("authModal").remove();
+  const posts = [
+    ...state.posts,
+    ...samples
+  ];
 
-    alert(
-      "Your VYBE account has been created!"
-    );
-  }
+
+  box.innerHTML =
+    posts
+    .map(
+      function(post,index){
+
+        return `
+
+          <article class="feed-item">
+
+            <div class="row between">
+
+              <div class="row">
+
+                <div class="avatar">
+                  ${initials(
+                    post.name
+                  )}
+                </div>
+
+
+                <div>
+
+                  <b>
+                    ${esc(
+                      post.name
+                    )}
+                  </b>
+
+                  <div class="muted">
+
+                    ${esc(
+                      post.handle
+                      || "@vybe"
+                    )}
+
+                    · VYBE
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <button
+                class="secondary"
+                type="button"
+                onclick="followUser(
+                  '${esc(
+                    post.handle
+                    || "@vybe"
+                  )}'
+                )"
+              >
+                Follow
+              </button>
+
+            </div>
+
+
+            <div class="feed-body">
+
+              ${esc(
+                post.text
+              )}
+
+            </div>
+
+
+            <div class="feed-actions">
+
+              <button
+                type="button"
+                onclick="likePost(${index})"
+              >
+
+                ♡
+
+                ${
+                  state.liked[index]
+                  ? "Liked"
+                  : "Like"
+                }
+
+              </button>
+
+
+              <button
+                type="button"
+                onclick="commentPost()"
+              >
+                💬 Comment
+              </button>
+
+
+              <button
+                type="button"
+                onclick="sharePost()"
+              >
+                ↗ Share
+              </button>
+
+            </div>
+
+          </article>
+
+        `;
+
+      }
+    )
+    .join("");
+
 }
+
+
+function createPost(){
+
+  const element =
+    document.getElementById(
+      "postText"
+    );
+
+
+  if(
+    !element ||
+    !element.value.trim()
+  ){
+
+    toast(
+      "Write something first."
+    );
+
+    return;
+
+  }
+
+
+  if(!state.user){
+
+    openAuthModal(
+      "signup"
+    );
+
+    toast(
+      "Create your account first to post."
+    );
+
+    return;
+
+  }
+
+
+  const displayName =
+    state.profile?.display_name
+    || state.user.email.split("@")[0];
+
+
+  const username =
+    state.profile?.username
+    || "user";
+
+
+  state.posts.unshift({
+
+    name:displayName,
+
+    handle:
+      "@" + username,
+
+    text:
+      element.value.trim()
+
+  });
+
+
+  localStorage.setItem(
+    "vybe_posts",
+    JSON.stringify(
+      state.posts.slice(
+        0,
+        50
+      )
+    )
+  );
+
+
+  element.value =
+    "";
+
+
+  addXP(10);
+
+  renderFeed();
+
+  showPage("home");
+
+  toast(
+    "Your VYBE was posted."
+  );
+
+}
+
+
+function likePost(index){
+
+  state.liked[index] =
+    !state.liked[index];
+
+
+  if(
+    state.liked[index]
+  ){
+
+    addXP(2);
+
+  }
+
+
+  renderFeed();
+
+}
+
+
+function commentPost(){
+
+  if(!state.user){
+
+    openAuthModal(
+      "signup"
+    );
+
+    return;
+
+  }
+
+
+  const text =
+    prompt(
+      "Comment on this VYBE:"
+    );
+
+
+  if(
+    text &&
+    text.trim()
+  ){
+
+    addXP(2);
+
+    toast(
+      "Comment added."
+    );
+
+  }
+
+}
+
+
+function sharePost(){
+
+  if(
+    navigator.clipboard
+  ){
+
+    navigator.clipboard.writeText(
+      location.href
+    );
+
+  }
+
+
+  addXP(1);
+
+  toast(
+    "VYBE link copied."
+  );
+
+}
+
+
+function followUser(handle){
+
+  if(!state.user){
+
+    openAuthModal(
+      "signup"
+    );
+
+    return;
+
+  }
+
+
+  state.following[
+    handle
+  ] = true;
+
+
+  addXP(2);
+
+  toast(
+    "Following " +
+    handle
+  );
+
+}
+
+
+function featureAction(
+  section,
+  feature
+){
+
+  if(
+    section === "settings" &&
+    feature === "Sign Out"
+  ){
+
+    signOut();
+
+    return;
+
+  }
+
+
+  toast(
+    feature +
+    " is connected to the VYBE feature map."
+  );
+
+}
+
+
+function openSearch(){
+
+  showPage(
+    "discover"
+  );
+
+
+  setTimeout(
+    function(){
+
+      document
+        .getElementById(
+          "discoverSearch"
+        )
+        ?.focus();
+
+    },
+    50
+  );
+
+}
+
+
+function runSearch(){
+
+  const query =
+    document
+      .getElementById(
+        "discoverSearch"
+      )
+      ?.value
+      .trim();
+
+
+  toast(
+    query
+      ? "Searching VYBE for “"
+        + query
+        + "”…"
+      : "Enter something to search."
+  );
+
+}
+
+
+function openProfileEditor(){
+
+  if(!state.user){
+
+    openAuthModal(
+      "signup"
+    );
+
+    return;
+
+  }
+
+
+  const profile =
+    state.profile || {};
+
+
+  document.getElementById(
+    "modalRoot"
+  ).innerHTML = `
+
+    <div
+      class="modal"
+      onclick="
+        if(event.target===this)
+        closeModal()
+      "
+    >
+
+      <div class="modal-box">
+
+        <h2>
+          Edit Your VYBE
+        </h2>
+
+
+        <p class="modal-sub">
+          Shape the identity people see.
+        </p>
+
+
+        <div class="form-grid">
+
+          <label>
+
+            <span class="form-label">
+              Display name
+            </span>
+
+            <input
+              class="field"
+              id="editName"
+              value="${esc(
+                profile.display_name
+                || ""
+              )}"
+            >
+
+          </label>
+
+
+          <label>
+
+            <span class="form-label">
+              Username
+            </span>
+
+            <input
+              class="field"
+              id="editUsername"
+              value="${esc(
+                profile.username
+                || ""
+              )}"
+            >
+
+          </label>
+
+
+          <label>
+
+            <span class="form-label">
+              Bio
+            </span>
+
+            <textarea
+              class="field"
+              id="editBio"
+              rows="4"
+            >${esc(
+              profile.bio
+              || ""
+            )}</textarea>
+
+          </label>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="primary"
+            style="margin:0"
+            type="button"
+            onclick="saveProfile()"
+          >
+            Save Profile
+          </button>
+
+
+          <button
+            class="secondary"
+            type="button"
+            onclick="closeModal()"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <div
+          id="profileMsg"
+          class="message"
+        ></div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function closeModal(){
+
+  document.getElementById(
+    "modalRoot"
+  ).innerHTML =
+    "";
+
+}
+
+
+async function saveProfile(){
+
+  const displayName =
+    document
+      .getElementById(
+        "editName"
+      )
+      .value
+      .trim();
+
+
+  const username =
+    document
+      .getElementById(
+        "editUsername"
+      )
+      .value
+      .trim()
+      .toLowerCase()
+      .replace(
+        /[^a-z0-9_]/g,
+        ""
+      );
+
+
+  const bio =
+    document
+      .getElementById(
+        "editBio"
+      )
+      .value
+      .trim();
+
+
+  if(
+    !displayName ||
+    !username
+  ){
+
+    toast(
+      "Display name and username are required."
+    );
+
+    return;
+
+  }
+
+
+  const message =
+    document.getElementById(
+      "profileMsg"
+    );
+
+
+  try{
+
+    const {
+      error:authError
+    } =
+      await sb.auth.updateUser({
+
+        data:{
+          display_name:
+            displayName,
+
+          username:
+            username,
+
+          bio:
+            bio
+        }
+
+      });
+
+
+    if(authError){
+      throw authError;
+    }
+
+
+    const {
+      error
+    } =
+      await sb
+        .from("profiles")
+        .upsert(
+          {
+            id:
+              state.user.id,
+
+            username:
+              username,
+
+            display_name:
+              displayName,
+
+            bio:
+              bio
+
+          },
+          {
+            onConflict:
+              "id"
+          }
+        );
+
+
+    if(error){
+
+      console.warn(
+        "Profile table update:",
+        error.message
+      );
+
+    }
+
+
+    state.profile = {
+
+      ...(state.profile || {}),
+
+      display_name:
+        displayName,
+
+      username:
+        username,
+
+      bio:
+        bio
+
+    };
+
+
+    render();
+
+    closeModal();
+
+    toast(
+      "Profile updated."
+    );
+
+  }catch(error){
+
+    message.textContent =
+      error.message;
+
+    message.className =
+      "message error";
+
+    message.style.display =
+      "block";
+
+  }
+
+}
+
+
+function openAuthModal(
+  mode = "signup"
+){
+
+  document.getElementById(
+    "modalRoot"
+  ).innerHTML = `
+
+    <div
+      class="modal"
+      onclick="
+        if(event.target===this)
+        closeModal()
+      "
+    >
+
+      <div class="modal-box">
+
+        <h2 id="authTitle">
+
+          ${
+            mode === "login"
+              ? "Welcome Back to VYBE"
+              : "Create Your VYBE Account"
+          }
+
+        </h2>
+
+
+        <p class="modal-sub">
+
+          Your account is the foundation
+          of your VYBE identity.
+
+        </p>
+
+
+        <div
+          id="signupFields"
+          class="form-grid
+            ${
+              mode === "login"
+                ? "hidden"
+                : ""
+            }"
+        >
+
+          <label>
+
+            <span class="form-label">
+              Display name
+            </span>
+
+            <input
+              class="field"
+              id="authName"
+              placeholder="Your display name"
+            >
+
+          </label>
+
+
+          <label>
+
+            <span class="form-label">
+              Username
+            </span>
+
+            <input
+              class="field"
+              id="authUsername"
+              placeholder="your_username"
+            >
+
+          </label>
+
+
+          <label>
+
+            <span class="form-label">
+              Date of birth
+            </span>
+
+            <input
+              class="field"
+              id="authDob"
+              type="date"
+            >
+
+          </label>
+
+        </div>
+
+
+        <div
+          class="form-grid"
+          style="margin-top:11px"
+        >
+
+          <label>
+
+            <span class="form-label">
+              Email
+            </span>
+
+            <input
+              class="field"
+              id="authEmail"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+            >
+
+          </label>
+
+
+          <label>
+
+            <span class="form-label">
+              Password
+            </span>
+
+            <input
+              class="field"
+              id="authPassword"
+              type="password"
+              autocomplete="new-password"
+              placeholder="At least 6 characters"
+            >
+
+          </label>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            class="primary"
+            style="margin:0"
+            type="button"
+            onclick="
+              submitAuth('${mode}')
+            "
+          >
+
+            ${
+              mode === "login"
+                ? "Log In"
+                : "Create Account"
+            }
+
+          </button>
+
+
+          <button
+            class="secondary"
+            type="button"
+            onclick="
+              toggleAuthMode(
+                '${
+                  mode === "login"
+                    ? "signup"
+                    : "login"
+                }'
+              )
+            "
+          >
+
+            ${
+              mode === "login"
+                ? "Create a new account"
+                : "Already have an account? Log in"
+            }
+
+          </button>
+
+
+          <button
+            class="secondary"
+            type="button"
+            onclick="closeModal()"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <div
+          id="authMsg"
+          class="message"
+        ></div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function toggleAuthMode(
+  mode
+){
+
+  openAuthModal(
+    mode
+  );
+
+}
+
+
+function ageFromDob(
+  dob
+){
+
+  const date =
+    new Date(
+      dob
+    );
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return null;
+
+  }
+
+
+  const now =
+    new Date();
+
+
+  let age =
+    now.getFullYear()
+    -
+    date.getFullYear();
+
+
+  const month =
+    now.getMonth()
+    -
+    date.getMonth();
+
+
+  if(
+    month < 0 ||
+    (
+      month === 0 &&
+      now.getDate()
+      <
+      date.getDate()
+    )
+  ){
+
+    age--;
+
+  }
+
+
+  return age;
+
+}
+
+
+async function submitAuth(
+  mode
+){
+
+  const email =
+    document
+      .getElementById(
+        "authEmail"
+      )
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById(
+        "authPassword"
+      )
+      .value;
+
+
+  const message =
+    document.getElementById(
+      "authMsg"
+    );
+
+
+  function fail(text){
+
+    message.textContent =
+      text;
+
+    message.className =
+      "message error";
+
+    message.style.display =
+      "block";
+
+  }
+
+
+  if(
+    !email ||
+    !password
+  ){
+
+    fail(
+      "Email and password are required."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    password.length < 6
+  ){
+
+    fail(
+      "Password must be at least 6 characters."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    mode === "login"
+  ){
+
+    const {
+      data,
+      error
+    } =
+      await sb.auth.signInWithPassword({
+
+        email:
+          email,
+
+        password:
+          password
+
+      });
+
+
+    if(error){
+
+      fail(
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    closeModal();
+
+    await loadUser();
+
+    toast(
+      "Welcome back to VYBE."
+    );
+
+    return;
+
+  }
+
+
+  const name =
+    document
+      .getElementById(
+        "authName"
+      )
+      .value
+      .trim();
+
+
+  const username =
+    document
+      .getElementById(
+        "authUsername"
+      )
+      .value
+      .trim()
+      .toLowerCase()
+      .replace(
+        /[^a-z0-9_]/g,
+        ""
+      );
+
+
+  const dob =
+    document.getElementById(
+      "authDob"
+    ).value;
+
+
+  const age =
+    ageFromDob(
+      dob
+    );
+
+
+  if(
+    !name ||
+    !username ||
+    !dob
+  ){
+
+    fail(
+      "Please complete your name, username and date of birth."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    age === null ||
+    age < 13
+  ){
+
+    fail(
+      "VYBE currently requires members to be 13 or older."
+    );
+
+    return;
+
+  }
+
+
+  const ageGroup =
+    age >= 18
+      ? "adult"
+      : "teen";
+
+
+  const {
+    data,
+    error
+  } =
+    await sb.auth.signUp({
+
+      email:
+        email,
+
+      password:
+        password,
+
+      options:{
+
+        data:{
+
+          display_name:
+            name,
+
+          username:
+            username,
+
+          dob:
+            dob,
+
+          age_group:
+            ageGroup,
+
+          bio:
+            "Your VYBE. Your people. Your story."
+
+        }
+
+      }
+
+    });
+
+
+  if(error){
+
+    fail(
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  if(data.user){
+
+    state.user =
+      data.user;
+
+
+    state.profile = {
+
+      display_name:
+        name,
+
+      username:
+        username,
+
+      dob:
+        dob,
+
+      age_group:
+        ageGroup,
+
+      bio:
+        "Your VYBE. Your people. Your story."
+
+    };
+
+
+    const {
+      error:profileError
+    } =
+      await sb
+        .from("profiles")
+        .upsert(
+          {
+
+            id:
+              data.user.id,
+
+            username:
+              username,
+
+            display_name:
+              name,
+
+            dob:
+              dob,
+
+            age_group:
+              ageGroup,
+
+            bio:
+              "Your VYBE. Your people. Your story."
+
+          },
+          {
+            onConflict:
+              "id"
+          }
+        );
+
+
+    if(profileError){
+
+      console.warn(
+        "profiles upsert:",
+        profileError.message
+      );
+
+    }
+
+  }
+
+
+  closeModal();
+
+  render();
+
+  showPage(
+    "profile"
+  );
+
+
+  if(data.session){
+
+    toast(
+      "Your VYBE account is ready."
+    );
+
+  }else{
+
+    toast(
+      "Check your email to confirm your VYBE account."
+    );
+
+  }
+
+}
+
+
+async function loadUser(){
+
+  const {
+    data
+  } =
+    await sb.auth.getUser();
+
+
+  if(
+    !data ||
+    !data.user
+  ){
+
+    state.user =
+      null;
+
+    state.profile =
+      null;
+
+    render();
+
+    return;
+
+  }
+
+
+  state.user =
+    data.user;
+
+
+  const metadata =
+    data.user.user_metadata
+    || {};
+
+
+  let profile = {
+
+    display_name:
+      metadata.display_name
+      ||
+      data.user.email
+      ?.split("@")[0]
+      ||
+      "VYBE User",
+
+    username:
+      metadata.username
+      ||
+      "username",
+
+    dob:
+      metadata.dob
+      ||
+      "",
+
+    age_group:
+      metadata.age_group
+      ||
+      "adult",
+
+    bio:
+      metadata.bio
+      ||
+      "Your VYBE. Your people. Your story."
+
+  };
+
+
+  const {
+    data:row
+  } =
+    await sb
+      .from("profiles")
+      .select(
+        "id,username,display_name,dob,age_group,avatar_url,bio"
+      )
+      .eq(
+        "id",
+        data.user.id
+      )
+      .maybeSingle();
+
+
+  if(row){
+
+    profile = {
+
+      ...profile,
+
+      ...row
+
+    };
+
+  }
+
+
+  state.profile =
+    profile;
+
+
+  render();
+
+}
+
+
+async function signOut(){
+
+  await sb.auth.signOut();
+
+
+  state.user =
+    null;
+
+  state.profile =
+    null;
+
+
+  render();
+
+  showPage(
+    "home"
+  );
+
+
+  toast(
+    "Signed out of VYBE."
+  );
+
+}
+
+
+sb.auth.onAuthStateChange(
+  function(
+    event,
+    session
+  ){
+
+    if(
+      session &&
+      !state.user
+    ){
+
+      loadUser();
+
+    }
+
+  }
+);
+
+
+buildNav();
+
+render();
+
+loadUser();
+
+renderRight();
+
 </script>
 
 </body>
