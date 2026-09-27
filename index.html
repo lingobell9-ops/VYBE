@@ -161,6 +161,48 @@ async function saveProfile(){
     console.error(e);
   }
 }
+async function createPost(){
+  if(!state.user){
+    openAuthModal('signup');
+    return;
+  }
+
+  const el=document.getElementById('postText');
+  const text=el?.value.trim()||'';
+
+  if(!text){
+    toast('Write something first.');
+    return;
+  }
+
+  try{
+    const {data,error}=await sb.from('posts')
+      .insert({
+        user_id:state.user.id,
+        content:text
+      })
+      .select('*')
+      .single();
+
+    if(error)throw error;
+
+    state.posts.unshift({
+      id:data.id,
+      text:data.content,
+      name:state.profile?.display_name||'VYBE Creator',
+      username:state.profile?.username||'creator',
+      location:'VYBE',
+      created_at:data.created_at
+    });
+
+    el.value='';
+    addXP(10);
+    render();
+    toast('VYBE posted successfully.');
+  }catch(e){
+    toast('Could not post VYBE: '+(e.message||'Unknown error'));
+  }
+}
 </script>
 </body>
 </html>
