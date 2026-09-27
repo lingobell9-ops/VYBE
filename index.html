@@ -120,6 +120,47 @@ async function submitAuth(mode){const email=document.getElementById('authEmail')
 async function loadUser(){const {data}=await sb.auth.getUser();state.user=data.user||null;if(state.user){const {data:p}=await sb.from('profiles').select('*').eq('id',state.user.id).maybeSingle();state.profile=p||{display_name:state.user.user_metadata?.display_name||'VYBE Member',username:state.user.user_metadata?.username||'member',bio:state.user.user_metadata?.bio||''};state.profileViews=Number(localStorage.getItem('vybe_profile_views')||0)+1;localStorage.setItem('vybe_profile_views',state.profileViews)}render()}
 sb.auth.onAuthStateChange(()=>setTimeout(loadUser,0));
 buildNav();render();loadUser();
+async function saveProfile(){
+  const name=document.getElementById('editName')?.value.trim()||'';
+  const username=document.getElementById('editUsername')?.value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'')||'';
+  const bio=document.getElementById('editBio')?.value.trim()||'';
+  const headline=document.getElementById('editHeadline')?.value.trim()||'';
+
+  if(!name||!username){
+    toast('Display name and username are required.');
+    return;
+  }
+
+  if(!state.user){
+    toast('Please log in first.');
+    return;
+  }
+
+  try{
+    const {data,error}=await sb.from('profiles')
+      .update({
+        username:username,
+        display_name:name,
+        bio:bio,
+        headline:headline,
+        updated_at:new Date().toISOString()
+      })
+      .eq('id',state.user.id)
+      .select('*')
+      .single();
+
+    if(error)throw error;
+    if(!data)throw new Error('Profile could not be saved.');
+
+    state.profile=data;
+    closeModal();
+    render();
+    toast('Profile saved successfully.');
+  }catch(e){
+    toast('Could not save profile: '+(e.message||'Unknown error'));
+    console.error(e);
+  }
+}
 </script>
 </body>
 </html>
