@@ -203,6 +203,94 @@ async function createPost(){
     toast('Could not post VYBE: '+(e.message||'Unknown error'));
   }
 }
+async function loadSupabasePosts(){
+  if(!state.user)return;
+
+  try{
+    const {data,error}=await sb.from('posts')
+      .select('id,user_id,content,image_url,created_at,updated_at')
+      .order('created_at',{ascending:false})
+      .limit(50);
+
+    if(error)throw error;
+
+    const rows=data||[];
+    const ids=[...new Set(rows.map(x=>x.user_id).filter(Boolean))];
+    let profiles=[];
+
+    if(ids.length){
+      const result=await sb.from('profiles')
+        .select('id,username,display_name,avatar_url')
+        .in('id',ids);
+
+      if(result.error)throw result.error;
+      profiles=result.data||[];
+    }
+
+    const profileMap={};
+    profiles.forEach(p=>profileMap[p.id]=p);
+
+    state.posts=rows.map(x=>{
+      const p=profileMap[x.user_id]||{};
+      return {
+        id:x.id,
+        text:x.content||'',
+        name:p.display_name||'VYBE Creator',
+        username:p.username||'creator',
+        avatar_url:p.avatar_url||'',
+        location:'VYBE',
+        created_at:x.created_at
+      };
+    });
+
+    window._supabaseFeedReady=true;
+    render();
+  }catch(e){
+    console.error(e);
+    toast('Could not load VYBE feed.');
+  }
+}
+
+function renderFeed(){
+  if(!window._supabaseFeedReady){
+    if(state.user&&!window._supabaseFeedLoading){
+      window._supabaseFeedLoading=true;
+      loadSupabasePosts();
+    }
+  }
+
+  const posts=[...state.posts];
+
+  if(!posts.length){
+    return `<div class="section-head"><h2>For You</h2></div>
+    <div class="card">
+      <p class="muted">Your VYBE feed will grow as you follow people, join communities and discover creators.</p>
+    </div>`;
+  }
+
+  return `<div class="section-head"><h2>For You</h2></div>
+  ${posts.map((x,i)=>`
+    <article class="feed-item">
+      <div class="row">
+        ${x.avatar_url
+          ? `<div class="avatar"><img src="${esc(x.avatar_url)}" alt="Profile"></div>`
+          : `<div class="avatar">${esc(initials(x.name||'V'))}</div>`
+        }
+        <div>
+          <b>${esc(x.name||'VYBE Creator')}</b>
+          <div class="muted">@${esc(x.username||'creator')} · ${esc(x.location||'VYBE')}</div>
+        </div>
+      </div>
+      <div class="feed-body">${esc(x.text)}</div>
+      <div class="feed-actions">
+        <button onclick="likePost(${i})">${state.likes[i]?'Liked':'Like'}</button>
+        <button onclick="commentPost()">Comment</button>
+        <button onclick="sharePost()">Share</button>
+        <button onclick="showPage('wallet')">Gift</button>
+      </div>
+    </article>
+  `).join('')}`;
+}
 </script>
 </body>
 </html>
