@@ -602,6 +602,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+const SUPABASE_URL =
+"https://olttlqjgzxtvriyoipe.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_2uhP7sc-G8MG-tJfNpH6GQ_6z4uaDZC";
+
+const sb =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 function openAuthModal() {
 
   const existing =
