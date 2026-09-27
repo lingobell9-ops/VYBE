@@ -733,6 +733,59 @@ function openAuthModal() {
   `;
 
   document.body.appendChild(modal);
+}async function createVYBEAccount() {
+
+  const email =
+    document.getElementById("authEmail").value.trim();
+
+  const password =
+    document.getElementById("authPassword").value;
+
+  if (!email || !password) {
+    alert("Please enter your email and password.");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Your password must be at least 6 characters.");
+    return;
+  }
+
+  const button =
+    document.querySelector(
+      '#authModal button[onclick="createVYBEAccount()"]'
+    );
+
+  if (button) {
+    button.disabled = true;
+    button.innerText = "Creating Account...";
+  }
+
+  const { data, error } =
+    await sb.auth.signUp({
+      email: email,
+      password: password
+    });
+
+  if (error) {
+
+    if (button) {
+      button.disabled = false;
+      button.innerText = "Create Account";
+    }
+
+    alert(error.message);
+    return;
+  }
+
+  if (data.user) {
+
+    document.getElementById("authModal").remove();
+
+    alert(
+      "Your VYBE account has been created!"
+    );
+  }
 }
 </script>
 
