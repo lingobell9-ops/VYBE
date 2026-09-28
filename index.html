@@ -1361,6 +1361,195 @@ function renderFeed(){
   });
 
 })();
+/* =========================================================
+   VYBE LIVE SECURE CONNECTION
+   ========================================================= */
+
+window.confirmStartLive = async function () {
+
+  if (!state.user) {
+    openAuthModal('login');
+    return;
+  }
+
+  const title =
+    document.getElementById('liveTitle')?.value.trim() ||
+    'VYBE LIVE';
+
+  const category =
+    document.getElementById('liveCategory')?.value ||
+    'Creator';
+
+  const guests =
+    document.getElementById('liveGuests')?.value ||
+    'everyone';
+
+  try {
+
+    toast('Starting your VYBE LIVE...');
+
+    const { data, error } = await sb.rpc(
+      'create_vybe_live',
+      {
+        p_title: title,
+        p_description: category,
+        p_age_restricted: false
+      }
+    );
+
+    if (error) {
+      console.error('VYBE LIVE start:', error);
+      toast(error.message || 'Could not start LIVE.');
+      return;
+    }
+
+    const liveData = Array.isArray(data)
+      ? data[0]
+      : data;
+
+    if (!liveData || !liveData.stream_id) {
+      toast('LIVE could not be created.');
+      return;
+    }
+
+    /*
+     * Keep the UI state, but the real LIVE now exists
+     * in Supabase.
+     */
+    state.live = {
+      active: true,
+      streamId: liveData.stream_id,
+      title: title,
+      category: category,
+      guests: guests,
+      hostId: liveData.host_id,
+      maxParticipants:
+        Number(liveData.max_participants || 20),
+      giftsEnabled:
+        !!liveData.gifts_enabled,
+      monetizationEnabled:
+        !!liveData.monetization_enabled
+    };
+
+    localStorage.setItem(
+      'vybe_live',
+      JSON.stringify(state.live)
+    );
+
+    closeModal();
+    showPage('live');
+
+    toast(
+      '🔴 You are LIVE! Up to ' +
+      state.live.maxParticipants +
+      ' people can join.'
+    );
+
+  } catch (error) {
+
+    console.error('VYBE LIVE:', error);
+
+    toast(
+      'Could not start LIVE: ' +
+      (error.message || 'Unknown error')
+    );
+  }
+};
+
+
+/*
+ * End the actual Supabase LIVE.
+ */
+window.endVYBELive = async function () {
+
+  const streamId =
+    state.live?.streamId ||
+    state.live?.id;
+
+  if (!streamId) {
+    state.live = null;
+    localStorage.removeItem('vybe_live');
+    showPage('live');
+    return;
+  }
+
+  try {
+
+    toast('Ending VYBE LIVE...');
+
+    const { data, error } = await sb.rpc(
+      'end_vybe_live',
+      {
+        p_stream_id: streamId
+      }
+    );
+
+    if (error) {
+      console.error('VYBE LIVE end:', error);
+      toast(error.message || 'Could not end LIVE.');
+      return;
+    }
+
+    state.live = null;
+
+    localStorage.removeItem('vybe_live');
+
+    toast('LIVE ended successfully.');
+
+    showPage('live');
+
+  } catch (error) {
+
+    console.error('VYBE LIVE end:', error);
+
+    toast(
+      'Could not end LIVE: ' +
+      (error.message || 'Unknown error')
+    );
+  }
+};
+
+
+/*
+ * Secure LIVE joining.
+ */
+window.joinVYBELive = async function (streamId) {
+
+  if (!state.user) {
+    openAuthModal('login');
+    return null;
+  }
+
+  const result =
+    await window.vybeJoinLive(streamId);
+
+  if (!result) return null;
+
+  toast(
+    'You joined LIVE • ' +
+    result.viewer_count +
+    '/' +
+    result.max_participants
+  );
+
+  return result;
+};
+
+
+/*
+ * Secure LIVE leaving.
+ */
+window.leaveVYBELive = async function (streamId) {
+
+  const result =
+    await window.vybeLeaveLive(streamId);
+
+  if (result) {
+    toast('You left the LIVE.');
+  }
+
+  return result;
+};
 </script>
 </body>
 </html>
