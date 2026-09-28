@@ -1859,6 +1859,282 @@ window.leaveVYBELive = async function (streamId) {
   );
 
 })();
+/* =========================================================
+   VYBE FINANCIAL STATE LOCK
+   Supabase is the ONLY source of truth for Coins / XP / Wallet
+   ========================================================= */
+
+(function () {
+  'use strict';
+
+  function lockFinancialState() {
+
+    if (typeof state === 'undefined') return;
+
+    /*
+     * Never trust financial values stored in the browser.
+     */
+    if (!state.user) {
+      state.coins = 0;
+      state.wallet = 0;
+      state.pending = 0;
+      state.xp = 0;
+    }
+
+    /*
+     * Remove old browser-only financial balances.
+     * These are no longer used by VYBE.
+     */
+    try {
+      localStorage.removeItem('vybe_coins');
+      localStorage.removeItem('vybe_wallet');
+      localStorage.removeItem('vybe_pending');
+      localStorage.removeItem('vybe_xp');
+    } catch (e) {}
+
+    if (typeof renderRight === 'function') {
+      renderRight();
+    }
+  }
+
+
+  /*
+   * Reload the real balances from Supabase
+   * after authentication.
+   */
+  async function refreshSecureState() {
+
+    if (!state?.user) {
+      lockFinancialState();
+      return;
+    }
+
+    if (
+      typeof window.vybeLoadSecureState ===
+      'function'
+    ) {
+      await window.vybeLoadSecureState();
+    }
+  }
+
+
+  /*
+   * Prevent the old local-storage XP function
+   * from ever becoming authoritative.
+   */
+  window.addXP = function (amount) {
+
+    if (
+      typeof window.vybeSecureXP ===
+      'function'
+    ) {
+      return window.vybeSecureXP(
+        amount,
+        'activity',
+        null,
+        'VYBE activity'
+      );
+    }
+
+    return false;
+  };
+
+
+  /*
+   * Wallet display now comes from the secure backend.
+   */
+  window.refreshVYBEWallet = async function () {
+
+    if (!state?.user) {
+      toast('Please log in first.');
+      return;
+    }
+
+    await refreshSecureState();
+
+    if (typeof renderRight === 'function') {
+      renderRight();
+    }
+  };
+
+
+  /*
+   * Withdrawal is intentionally blocked until the
+   * payout provider and conversion system are configured.
+   *
+   * This prevents the old browser-only withdrawal flow
+   * from creating unsafe payout requests.
+   */
+  window.withdraw = async function () {
+
+    if (!state?.user) {
+      openAuthModal('login');
+      return;
+    }
+
+    try {
+
+      const { data, error } =
+        await sb.rpc(
+          'get_my_payout_summary'
+        );
+
+      if (error) {
+        console.error(
+          'VYBE payout summary:',
+          error
+        );
+
+        toast(
+          'Creator payout information could not be loaded.'
+        );
+
+        return;
+      }
+
+      const summary =
+        Array.isArray(data)
+          ? data[0]
+          : data;
+
+      if (
+        !summary ||
+        summary.payout_setup_status !==
+          'enabled'
+      ) {
+
+        openModal(`
+          <h2>Creator Payouts</h2>
+
+          <p class="modal-sub">
+            Creator payouts are being prepared.
+          </p>
+
+          <div class="notice">
+            Your VYBE creator earnings remain recorded
+            securely. Payouts will become available once
+            the payout provider and currency conversion
+            system are fully configured.
+          </div>
+
+          <button
+            class="secondary"
+            style="width:100%;margin-top:14px"
+            onclick="closeModal()"
+          >
+            Close
+          </button>
+        `);
+
+        return;
+      }
+
+      openModal(`
+        <h2>Creator Payouts</h2>
+
+        <p class="modal-sub">
+          Your secure creator balance
+        </p>
+
+        <div class="metric-grid">
+
+          <div class="metric">
+            <b>
+              ${Number(
+                summary.available_coins || 0
+              ).toLocaleString()}
+            </b>
+            <span>Available Coins</span>
+          </div>
+
+          <div class="metric">
+            <b>
+              ${Number(
+                summary.pending_coins || 0
+              ).toLocaleString()}
+            </b>
+            <span>Pending Coins</span>
+          </div>
+
+          <div class="metric">
+            <b>
+              ${Number(
+                summary.paid_payouts || 0
+              ).toLocaleString()}
+            </b>
+            <span>Paid Payouts</span>
+          </div>
+
+        </div>
+
+        <button
+          class="secondary"
+          style="width:100%;margin-top:14px"
+          onclick="closeModal()"
+        >
+          Close
+        </button>
+      `);
+
+    } catch (e) {
+
+      console.error(
+        'VYBE payout:',
+        e
+      );
+
+      toast(
+        'Creator payout information unavailable.'
+      );
+    }
+  };
+
+
+  /*
+   * Make sure the browser cannot resurrect
+   * the old fake balances after page load.
+   */
+  lockFinancialState();
+
+  /*
+   * Authentication changes.
+   */
+  if (
+    typeof sb !== 'undefined' &&
+    sb.auth
+  ) {
+
+    sb.auth.onAuthStateChange(
+      function (event, session) {
+
+        if (
+          event === 'SIGNED_OUT'
+        ) {
+
+          lockFinancialState();
+
+          return;
+        }
+
+        if (
+          event === 'SIGNED_IN' ||
+          event === 'TOKEN_REFRESHED' ||
+          event === 'USER_UPDATED'
+        ) {
+
+          setTimeout(
+            refreshSecureState,
+            400
+          );
+
+        }
+
+      }
+    );
+
+  }
+
+})();
 </script>
 </body>
 </html>
