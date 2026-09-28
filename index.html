@@ -3150,6 +3150,496 @@ window.startCoinCheckout = async function (packageId, currency = 'ZAR') {
 
 })();
 </script>
+/* =========================================================
+   VYBE BUTTON INTEGRITY ENGINE
+   Navigation + LIVE + Social + Marketplace
+   ========================================================= */
+
+(function () {
+  'use strict';
+
+  const wait = (fn, ms = 150) => {
+    setTimeout(() => {
+      try { fn(); } catch (e) { console.warn('VYBE button:', e); }
+    }, ms);
+  };
+
+  function status(title, message) {
+    if (typeof window.vybeOpenStatus === 'function') {
+      window.vybeOpenStatus(title, message);
+      return;
+    }
+
+    if (typeof window.openModal === 'function') {
+      window.openModal(
+        '<h2>' + title + '</h2>' +
+        '<p style="color:#aaa;line-height:1.6">' + message + '</p>'
+      );
+      return;
+    }
+
+    alert(title + '\n\n' + message);
+  }
+
+  function go(page) {
+    if (typeof window.showPage === 'function') {
+      window.showPage(page);
+      return true;
+    }
+    return false;
+  }
+
+  function liveSetup() {
+    if (typeof window.vybeOpenLiveSetup === 'function') {
+      window.vybeOpenLiveSetup();
+      return true;
+    }
+
+    if (typeof window.openLiveSetup === 'function') {
+      window.openLiveSetup();
+      return true;
+    }
+
+    go('live');
+    return true;
+  }
+
+  function camera() {
+    if (typeof window.vybeStartCamera === 'function') {
+      window.vybeStartCamera();
+      return true;
+    }
+
+    status(
+      'Camera',
+      'Your device camera controls are being prepared.'
+    );
+    return true;
+  }
+
+  function route(label) {
+    const t = String(label || '').trim().toLowerCase();
+
+    if (!t) return false;
+
+    /* MAIN NAVIGATION */
+
+    if (t === 'home' || t === 'fyp' || t === 'for you') {
+      return go('home');
+    }
+
+    if (t === 'discover' || t === 'search') {
+      return go('discover');
+    }
+
+    if (t === 'messages' || t === 'message' || t === 'chat') {
+      return go('messages');
+    }
+
+    if (t === 'profile' || t === 'me') {
+      return go('profile');
+    }
+
+    if (t === 'notifications' || t === 'activity') {
+      return go('notifications');
+    }
+
+    if (t === 'communities' || t === 'community') {
+      return go('communities');
+    }
+
+    if (t === 'gaming' || t === 'games') {
+      return go('gaming');
+    }
+
+    if (t === 'music' || t === 'sounds') {
+      return go('music');
+    }
+
+    if (t === 'store' || t === 'shop') {
+      return go('store');
+    }
+
+    if (t === 'jobs' || t === 'work') {
+      return go('jobs');
+    }
+
+    if (t === 'creator' || t === 'studio') {
+      return go('creator');
+    }
+
+    /* LIVE */
+
+    if (
+      t === 'go live' ||
+      t === 'start live' ||
+      t === 'start a live' ||
+      t === 'live'
+    ) {
+      return liveSetup();
+    }
+
+    if (t === 'camera' || t === 'device camera') {
+      return camera();
+    }
+
+    if (t === 'flip camera') {
+      if (typeof window.vybeFlipCamera === 'function') {
+        window.vybeFlipCamera();
+      }
+      return true;
+    }
+
+    if (t === 'mic' || t === 'microphone') {
+      if (typeof window.vybeToggleMic === 'function') {
+        window.vybeToggleMic();
+      }
+      return true;
+    }
+
+    if (t === 'screen' || t === 'screen share') {
+      if (typeof window.vybeStartScreenShare === 'function') {
+        window.vybeStartScreenShare();
+      } else {
+        status(
+          'Screen Share',
+          'Screen sharing is available from your LIVE controls.'
+        );
+      }
+      return true;
+    }
+
+    if (t === 'cast') {
+      if (typeof window.vybeCast === 'function') {
+        window.vybeCast();
+      } else {
+        status(
+          'Cast',
+          'Casting controls will appear when a supported device is available.'
+        );
+      }
+      return true;
+    }
+
+    if (t === 'share camera') {
+      if (typeof window.vybeShareCamera === 'function') {
+        window.vybeShareCamera();
+      } else {
+        camera();
+      }
+      return true;
+    }
+
+    if (t === 'share') {
+      if (typeof window.shareVYBE === 'function') {
+        window.shareVYBE();
+      } else if (navigator.share) {
+        navigator.share({
+          title: 'VYBE',
+          text: 'Join me on VYBE',
+          url: location.href
+        }).catch(() => {});
+      } else {
+        navigator.clipboard?.writeText(location.href);
+        status('Share', 'VYBE link copied.');
+      }
+      return true;
+    }
+
+    if (t === 'guests' || t === 'guest requests' || t === 'requests') {
+      if (typeof window.openLiveGuests === 'function') {
+        window.openLiveGuests();
+      } else if (typeof window.openGuestPanel === 'function') {
+        window.openGuestPanel();
+      } else {
+        status(
+          'Guests',
+          'Guest controls are available from your LIVE room.'
+        );
+      }
+      return true;
+    }
+
+    if (t === 'gifts' || t === 'send gift') {
+      if (typeof window.openVYBEGiftPicker === 'function') {
+        window.openVYBEGiftPicker();
+      } else if (typeof window.openGiftPicker === 'function') {
+        window.openGiftPicker();
+      } else {
+        status(
+          'VYBE Gifts',
+          'Animated VYBE Gifts are available from the gift button.'
+        );
+      }
+      return true;
+    }
+
+    if (t === 'tips' || t === 'rewards' || t === 'game rewards') {
+      status(
+        'LIVE Rewards',
+        'Your LIVE rewards and gift activity will appear here.'
+      );
+      return true;
+    }
+
+    if (t === 'gaming ranking') {
+      go('gaming');
+      return true;
+    }
+
+    if (t === 'gallery') {
+      go('profile');
+      return true;
+    }
+
+    if (t === 'play together') {
+      status(
+        'Play Together',
+        'Choose a game and invite another VYBE creator to play together.'
+      );
+      return true;
+    }
+
+    if (t === 'poll') {
+      status(
+        'LIVE Poll',
+        'Create a poll for your LIVE viewers.'
+      );
+      return true;
+    }
+
+    if (t === 'partnership') {
+      status(
+        'Partnership',
+        'Creator partnership tools will appear here.'
+      );
+      return true;
+    }
+
+    if (t === 'fan club') {
+      status(
+        'Fan Club',
+        'Your LIVE fan club tools will appear here.'
+      );
+      return true;
+    }
+
+    if (t === 'promote') {
+      status(
+        'Promote',
+        'Promote your LIVE or VYBE content.'
+      );
+      return true;
+    }
+
+    if (t === 'business') {
+      go('creator');
+      return true;
+    }
+
+    if (t === 'live goal') {
+      status(
+        'LIVE Goal',
+        'Set a goal for your current LIVE session.'
+      );
+      return true;
+    }
+
+    if (t === 'voice chat') {
+      go('messages');
+      return true;
+    }
+
+    if (t === 'mobile gaming') {
+      status(
+        'Mobile Gaming',
+        'Mobile gaming LIVE controls.'
+      );
+      return true;
+    }
+
+    if (t === 'live studio') {
+      go('creator');
+      return true;
+    }
+
+    if (t === 'settings') {
+      go('settings');
+      return true;
+    }
+
+    /* MARKETPLACE */
+
+    if (t === 'sell' || t === 'sell something' || t === 'add product') {
+      if (typeof window.openSellModal === 'function') {
+        window.openSellModal();
+      } else if (typeof window.saveListing === 'function') {
+        status(
+          'VYBE Store',
+          'Create your product listing from the Store section.'
+        );
+      } else {
+        go('store');
+      }
+      return true;
+    }
+
+    if (
+      t === 'post a job' ||
+      t === 'post job' ||
+      t === 'create job'
+    ) {
+      if (typeof window.openJobModal === 'function') {
+        window.openJobModal();
+      } else {
+        go('jobs');
+      }
+      return true;
+    }
+
+    /* PROFILE COLLECTIONS */
+
+    if (t === 'saved') {
+      if (typeof window.openVYBEProfileCollection === 'function') {
+        window.openVYBEProfileCollection('saved');
+      }
+      return true;
+    }
+
+    if (t === 'liked') {
+      if (typeof window.openVYBEProfileCollection === 'function') {
+        window.openVYBEProfileCollection('liked');
+      }
+      return true;
+    }
+
+    if (t === 'reposts') {
+      if (typeof window.openVYBEProfileCollection === 'function') {
+        window.openVYBEProfileCollection('reposts');
+      }
+      return true;
+    }
+
+    /* COMMUNITY */
+
+    if (t === 'create community') {
+      if (typeof window.openCreateCommunity === 'function') {
+        window.openCreateCommunity();
+      } else {
+        go('communities');
+      }
+      return true;
+    }
+
+    if (t === 'create room') {
+      if (typeof window.openCreateRoom === 'function') {
+        window.openCreateRoom();
+      } else {
+        go('communities');
+      }
+      return true;
+    }
+
+    if (t === 'find matches') {
+      go('discover');
+      return true;
+    }
+
+    /* AI */
+
+    if (
+      t === 'open ai workspace' ||
+      t === 'ai workspace'
+    ) {
+      go('creator');
+      return true;
+    }
+
+    return false;
+  }
+
+  /* Capture button clicks before old toast-only handlers run. */
+
+  document.addEventListener(
+    'click',
+    function (event) {
+      const button = event.target.closest(
+        'button, [role="button"], .nav-item, .action-btn, .tool-btn'
+      );
+
+      if (!button) return;
+
+      const text =
+        button.getAttribute('aria-label') ||
+        button.getAttribute('title') ||
+        button.textContent ||
+        '';
+
+      const handled = route(text);
+
+      if (handled) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    },
+    true
+  );
+
+  /* Keep tab navigation alive when tabs have no onclick. */
+
+  function wireTabs() {
+    document.querySelectorAll(
+      '.profile-tab, .profile-tabs button, .profile-tabs [role="tab"]'
+    ).forEach(tab => {
+      if (tab.dataset.vybeWired === '1') return;
+
+      tab.dataset.vybeWired = '1';
+
+      tab.addEventListener('click', function () {
+        const label = (
+          this.textContent ||
+          this.getAttribute('aria-label') ||
+          ''
+        ).trim().toLowerCase();
+
+        if (label === 'saved') {
+          window.openVYBEProfileCollection?.('saved');
+        }
+
+        if (label === 'liked') {
+          window.openVYBEProfileCollection?.('liked');
+        }
+
+        if (label === 'reposts') {
+          window.openVYBEProfileCollection?.('reposts');
+        }
+
+        if (label === 'jobs') {
+          go('jobs');
+        }
+      });
+    });
+  }
+
+  wireTabs();
+
+  new MutationObserver(wireTabs).observe(
+    document.body,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+
+  /* Make sure external engines have loaded before testing. */
+
+  wait(function () {
+    console.log(
+      'VYBE Button Integrity Engine active'
+    );
+  }, 500);
+
+})();
 <script src="https://olttlqjgzxtvlriyoipe.supabase.co/functions/v1/vybe-core-engine">
 </script>
 <script src="https://olttlqjgzxtvlriyoipe.supabase.co/functions/v1/vybe-gift-engine">
