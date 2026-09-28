@@ -1550,6 +1550,315 @@ window.leaveVYBELive = async function (streamId) {
 
   return result;
 };
+/* =========================================================
+   VYBE SECURE GIFTS CONNECTION
+   ========================================================= */
+
+(function () {
+
+  const SECURE_GIFTS = [
+    {
+      name: 'Heart',
+      emoji: '❤️',
+      cost: 10
+    },
+    {
+      name: 'Fire',
+      emoji: '🔥',
+      cost: 25
+    },
+    {
+      name: 'Star',
+      emoji: '⭐',
+      cost: 50
+    },
+    {
+      name: 'Diamond',
+      emoji: '💎',
+      cost: 100
+    },
+    {
+      name: 'Crown',
+      emoji: '👑',
+      cost: 250
+    },
+    {
+      name: 'VYBE Rocket',
+      emoji: '🚀',
+      cost: 500
+    }
+  ];
+
+
+  /*
+   * Secure LIVE gift sender.
+   *
+   * The receiver must be the LIVE host.
+   * The actual Coin deduction happens inside Supabase.
+   */
+  window.sendGift = async function (name, cost) {
+
+    if (!state.user) {
+      openAuthModal('login');
+      return;
+    }
+
+    const gift =
+      SECURE_GIFTS.find(g => g.name === name);
+
+    if (!gift) {
+      toast('Gift not available.');
+      return;
+    }
+
+    const receiverId =
+      state.live?.hostId ||
+      state.live?.userId;
+
+    if (!receiverId) {
+      toast('The LIVE host could not be found.');
+      return;
+    }
+
+    if (receiverId === state.user.id) {
+      toast('You cannot send a gift to yourself.');
+      return;
+    }
+
+    if (Number(state.coins || 0) < gift.cost) {
+      toast(
+        'Not enough VYBE Coins. You need ' +
+        gift.cost +
+        ' Coins.'
+      );
+      return;
+    }
+
+    const success =
+      await window.vybeSendGift(
+        gift.name,
+        receiverId,
+        null,
+        null
+      );
+
+    if (success) {
+      await window.vybeLoadSecureState();
+    }
+  };
+
+
+  /*
+   * Replace the old placeholder LIVE gifts
+   * with the real VYBE gift catalogue.
+   */
+  function updateLiveGiftButtons() {
+
+    const grids =
+      document.querySelectorAll('.gift-grid');
+
+    grids.forEach(grid => {
+
+      if (
+        grid.closest('#page-live') ||
+        grid.parentElement?.textContent
+          ?.includes('LIVE Gifts')
+      ) {
+
+        grid.innerHTML =
+          SECURE_GIFTS.map(g => `
+            <button
+              class="gift"
+              onclick="sendGift('${g.name}',${g.cost})"
+            >
+              <span
+                style="
+                  display:block;
+                  font-size:30px;
+                  margin-bottom:6px;
+                "
+              >
+                ${g.emoji}
+              </span>
+
+              <b>${g.name}</b>
+
+              <div class="small muted">
+                ${g.cost} Coins
+              </div>
+            </button>
+          `).join('');
+
+      }
+
+    });
+
+  }
+
+
+  /*
+   * Watch for VYBE page changes.
+   */
+  const oldShowPage =
+    window.showPage;
+
+  if (typeof oldShowPage === 'function') {
+
+    window.showPage = function (name) {
+
+      const result =
+        oldShowPage.apply(this, arguments);
+
+      if (name === 'live') {
+        setTimeout(
+          updateLiveGiftButtons,
+          50
+        );
+      }
+
+      return result;
+    };
+
+  }
+
+
+  /*
+   * FYP video gift picker.
+   */
+  window.openVYBEVideoGiftPicker =
+    function (videoId, receiverId) {
+
+      if (!state.user) {
+        openAuthModal('login');
+        return;
+      }
+
+      if (!receiverId) {
+        toast('This creator cannot receive gifts yet.');
+        return;
+      }
+
+      openModal(`
+        <h2>Send a VYBE Gift 🎁</h2>
+
+        <p class="modal-sub">
+          Choose a gift to support this creator.
+        </p>
+
+        <div class="gift-grid">
+
+          ${SECURE_GIFTS.map(g => `
+            <button
+              class="gift"
+              onclick="
+                closeModal();
+                vybeSendGift(
+                  '${g.name}',
+                  '${receiverId}',
+                  '${videoId}',
+                  null
+                );
+              "
+            >
+
+              <span
+                style="
+                  display:block;
+                  font-size:30px;
+                  margin-bottom:6px;
+                "
+              >
+                ${g.emoji}
+              </span>
+
+              <b>${g.name}</b>
+
+              <div class="small muted">
+                ${g.cost} Coins
+              </div>
+
+            </button>
+          `).join('')}
+
+        </div>
+
+        <button
+          class="secondary"
+          style="width:100%;margin-top:14px"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+      `);
+    };
+
+
+  /*
+   * Replace the FYP placeholder gift action.
+   */
+  window.giftVYBEVideo =
+    function (videoId) {
+
+      if (!state.user) {
+        openAuthModal('login');
+        return;
+      }
+
+      /*
+       * Find the video currently displayed in the FYP.
+       */
+      const item =
+        document.querySelector(
+          '.vybe-fyp-item[data-video-id="' +
+          videoId +
+          '"]'
+        );
+
+      /*
+       * The current FYP data may expose the creator ID
+       * through the article dataset in future versions.
+       */
+      const receiverId =
+        item?.dataset?.userId ||
+        item?.dataset?.creatorId ||
+        null;
+
+      if (!receiverId) {
+        toast(
+          'Creator gift connection is ready, but this video does not yet expose the creator ID.'
+        );
+        return;
+      }
+
+      openVYBEVideoGiftPicker(
+        videoId,
+        receiverId
+      );
+    };
+
+
+  /*
+   * Refresh the real wallet after a gift.
+   */
+  window.addEventListener(
+    'vybeGiftSent',
+    function () {
+      if (
+        typeof window.vybeLoadSecureState ===
+        'function'
+      ) {
+        window.vybeLoadSecureState();
+      }
+    }
+  );
+
+
+  setTimeout(
+    updateLiveGiftButtons,
+    500
+  );
+
+})();
 </script>
 </body>
 </html>
