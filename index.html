@@ -1077,6 +1077,179 @@ function renderFeed(){
 
  })();
 </script>
+
+<style>
+:root{
+  --bg:#08090d;
+  --panel:rgba(22,24,34,.72);
+  --panel2:rgba(30,32,44,.64);
+  --line:rgba(255,255,255,.085);
+  --line-bright:rgba(255,255,255,.14);
+  --muted:#a5a8b7;
+  --glass:rgba(255,255,255,.045);
+  --shadow:0 18px 50px rgba(0,0,0,.38);
+}
+
+html,body{
+  background:
+    radial-gradient(circle at 15% 0%,rgba(255,0,170,.10),transparent 32%),
+    radial-gradient(circle at 85% 10%,rgba(80,80,255,.10),transparent 30%),
+    var(--bg) !important;
+}
+
+body{
+  color:#f7f7fb !important;
+}
+
+header,
+.topbar,
+.navbar{
+  background:rgba(10,11,17,.72) !important;
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--line) !important;
+}
+
+.card,
+.panel,
+.box,
+.modal,
+.right-card,
+.feed-card,
+.post,
+.store-card,
+.profile-card,
+.feature-card,
+.live-card{
+  background:linear-gradient(
+    145deg,
+    rgba(255,255,255,.065),
+    rgba(255,255,255,.025)
+  ) !important;
+  border:1px solid var(--line) !important;
+  box-shadow:var(--shadow) !important;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-radius:20px !important;
+}
+
+button,
+.btn{
+  border-radius:14px !important;
+  border:1px solid rgba(255,255,255,.09) !important;
+  transition:.2s ease !important;
+}
+
+button:hover,
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 25px rgba(150,80,255,.18);
+}
+
+input,
+textarea,
+select{
+  background:rgba(255,255,255,.045) !important;
+  border:1px solid var(--line) !important;
+  color:#fff !important;
+  border-radius:14px !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:rgba(180,100,255,.5) !important;
+  box-shadow:0 0 0 3px rgba(160,80,255,.10) !important;
+  outline:none !important;
+}
+
+h1,h2,h3,h4{
+  letter-spacing:-.02em;
+}
+
+.muted,
+.secondary,
+small{
+  color:var(--muted) !important;
+}
+
+.chip,
+.pill,
+.badge{
+  background:rgba(255,255,255,.055) !important;
+  border:1px solid var(--line) !important;
+  border-radius:999px !important;
+}
+
+.hero{
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,0,170,.16),transparent 35%),
+    radial-gradient(circle at 80% 20%,rgba(70,80,255,.16),transparent 35%),
+    rgba(20,21,30,.72) !important;
+  border:1px solid var(--line-bright) !important;
+  border-radius:24px !important;
+  box-shadow:var(--shadow) !important;
+}
+
+img{
+  border-radius:inherit;
+}
+
+video{
+  border-radius:18px;
+}
+
+.toast{
+  background:rgba(18,19,27,.88) !important;
+  border:1px solid var(--line-bright) !important;
+  box-shadow:0 15px 45px rgba(0,0,0,.45) !important;
+  backdrop-filter:blur(20px);
+}
+
+.modal{
+  background:rgba(16,17,24,.92) !important;
+  box-shadow:0 30px 80px rgba(0,0,0,.6) !important;
+}
+
+.store-card:hover,
+.feature-card:hover,
+.feed-card:hover{
+  border-color:rgba(180,100,255,.22) !important;
+  transform:translateY(-2px);
+  transition:.2s ease;
+}
+
+::-webkit-scrollbar{
+  width:7px;
+}
+
+::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.12);
+  border-radius:999px;
+}
+
+@media(max-width:700px){
+  .card,
+  .panel,
+  .box,
+  .feed-card,
+  .store-card,
+  .feature-card{
+    border-radius:17px !important;
+  }
+
+  body{
+    overflow-x:hidden;
+  }
+}
+</style>
+
+</head>
+<body>
   <script>
 /* =========================================================
    VYBE SECURE BACKEND OVERRIDE
