@@ -79,7 +79,113 @@ function sharePost(){toast('Share options opened')}
 function featureAction(name){if(name==='Photo'||name==='Video'||name==='Long-form video'){if(!state.user){openAuthModal('signup');return}openModal(`<h2>Create ${esc(name)}</h2><p class="modal-sub">Choose your media and add it to your VYBE.</p><input id="mediaFile" class="field" type="file" accept="${name==='Photo'?'image/*':name==='Video'||name==='Long-form video'?'video/*':'*/*'}"><textarea id="mediaCaption" class="field" rows="3" style="margin-top:10px" placeholder="Write a caption"></textarea><button class="primary" style="width:100%" onclick="createMediaVYBE('${name}')">Create VYBE</button><div id="mediaMsg" class="message"></div>`);return}if(name==='Location'){openModal(`<h2>Add location</h2><p class="modal-sub">Choose how much location information your VYBE shows.</p><div class="form-grid"><input id="postLocation" class="field" placeholder="Place or city"><select id="locationVisibility" class="field"><option>Place only</option><option>City/area only</option><option>Exact location</option><option>Do not show location</option></select></div><button class="primary" style="width:100%" onclick="savePostLocation()">Save location</button>`);return}toast(name+' option selected')}
 async function createMediaVYBE(type){const f=document.getElementById('mediaFile')?.files?.[0];const caption=document.getElementById('mediaCaption')?.value.trim()||'';if(!f){toast('Choose a file first.');return}if(f.size>100*1024*1024){toast('Media must be 100 MB or smaller.');return}state.posts.push({text:caption||type+' VYBE',name:state.profile?.display_name||'VYBE Creator',username:state.profile?.username||'creator',location:state.pendingLocation||'VYBE',media_type:type,file_name:f.name});localStorage.setItem('vybe_posts',JSON.stringify(state.posts));addXP(10);closeModal();render();toast(type+' VYBE created. Media upload storage can be connected through Supabase Storage.')}
 function savePostLocation(){const v=document.getElementById('postLocation')?.value.trim();const mode=document.getElementById('locationVisibility')?.value;if(mode==='Do not show location'||!v)state.pendingLocation='';else state.pendingLocation=v;closeModal();toast(mode==='Do not show location'?'Location hidden':'Location saved for your next VYBE')}
-function startLive(){if(!state.user){openAuthModal('signup');return}openModal(`<h2>Start VYBE LIVE</h2><p class="modal-sub">Set up your LIVE before you go on air.</p><div class="form-grid"><input id="liveTitle" class="field" placeholder="LIVE title"><select id="liveCategory" class="field"><option>Gaming</option><option>Just Chatting</option><option>Music</option><option>Creator</option><option>Business</option></select><select id="liveGuests" class="field"><option value="everyone">Guest requests: Everyone</option><option value="followers">Followers only</option><option value="subscribers">Subscribers only</option><option value="off">Guest requests off</option></select></div><button class="primary" style="width:100%" onclick="confirmStartLive()">Go LIVE</button>`)}
+async function startLive(){
+  if(!state.user){
+    openAuthModal('signup');
+    return;
+  }
+
+  try{
+    const {data,error}=await sb.rpc('get_my_active_live');
+
+    if(!error && data){
+      const live=Array.isArray(data)?data[0]:data;
+
+      if(live && live.stream_id){
+        openModal(`
+          <h2>Active VYBE LIVE Found</h2>
+          <p class="modal-sub">
+            You already have an active LIVE session.
+          </p>
+
+          <div class="card" style="margin:12px 0">
+            <b>${esc(live.title||'VYBE LIVE')}</b>
+            <p class="muted" style="margin-top:6px">
+              Status: ${esc(live.status||'live')}
+            </p>
+          </div>
+
+          <div class="modal-actions">
+            <button class="primary"
+              onclick="closeModal();showPage('live')">
+              Resume Active LIVE
+            </button>
+
+            <button class="danger"
+              onclick="endVYBEActiveLive('${live.stream_id}')">
+              End Active LIVE
+            </button>
+
+            <button class="secondary"
+              onclick="closeModal()">
+              Cancel
+            </button>
+          </div>
+        `);
+        return;
+      }
+    }
+  }catch(e){
+    console.warn('Active LIVE check:',e);
+  }
+
+  openModal(`
+    <h2>Start VYBE LIVE</h2>
+    <p class="modal-sub">
+      Set up your LIVE before you go on air.
+    </p>
+
+    <div class="form-grid">
+      <input id="liveTitle"
+        class="field"
+        placeholder="LIVE title">
+
+      <select id="liveCategory" class="field">
+        <option>Gaming</option>
+        <option>Just Chatting</option>
+        <option>Music</option>
+        <option>Creator</option>
+        <option>Business</option>
+      </select>
+
+      <select id="liveGuests" class="field">
+        <option value="everyone">Guest requests: Everyone</option>
+        <option value="followers">Followers only</option>
+        <option value="subscribers">Subscribers only</option>
+        <option value="off">Guest requests off</option>
+      </select>
+    </div>
+
+    <button class="primary"
+      style="width:100%"
+      onclick="confirmStartLive()">
+      Go LIVE
+    </button>
+  `);
+}
+  async function endVYBEActiveLive(streamId){
+  if(!streamId)return;
+
+  try{
+    const {data,error}=await sb.rpc('end_vybe_live',{
+      p_stream_id:streamId
+    });
+
+    if(error){
+      console.error('End active LIVE:',error);
+      toast(error.message||'Could not end the active LIVE.');
+      return;
+    }
+
+    state.live=null;
+    localStorage.removeItem('vybe_live');
+    closeModal();
+    toast('Active LIVE ended. You can start a new LIVE now.');
+  }catch(e){
+    console.error('End active LIVE:',e);
+    toast('Could not end the active LIVE.');
+  }
+  }
 function confirmStartLive(){state.live={active:true,title:document.getElementById('liveTitle').value.trim()||'VYBE LIVE',category:document.getElementById('liveCategory').value,guests:document.getElementById('liveGuests').value};localStorage.setItem('vybe_live',JSON.stringify(state.live));closeModal();showPage('live');toast('VYBE LIVE is ready. The Stage supports up to 20 people.')}
 function sendGift(name,cost){if(state.coins<cost){toast('Not enough VYBE Coins');return}state.coins-=cost;localStorage.setItem('vybe_coins',state.coins);toast(name+' Gift sent');renderRight()}
 function buyCoins(){openModal(`<h2>VYBE Coins</h2><p class="modal-sub">Coins are used for VYBE Gifts and supported premium interactions.</p><div class="grid">${[[100,'R 20'],[500,'R 90'],[1200,'R 199'],[2500,'R 399']].map(x=>`<button class="tile" onclick="startCoinCheckout(${x[0]})"><strong>${x[0].toLocaleString()} Coins</strong><span>${x[1]}</span></button>`).join('')}</div><div id="coinMsg" class="message"></div>`)}
