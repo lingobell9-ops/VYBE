@@ -2135,6 +2135,224 @@ window.leaveVYBELive = async function (streamId) {
   }
 
 })();
+/* =========================================================
+   VYBE COIN STORE
+   Loads real Coin packages from Supabase
+   ========================================================= */
+
+(function () {
+
+  window.buyCoins = async function () {
+
+    if (!state.user) {
+      openAuthModal('login');
+      return;
+    }
+
+    try {
+
+      const { data: allowed, error: allowedError } =
+        await sb.rpc('can_use_real_money_features');
+
+      if (allowedError) {
+        console.error(
+          'VYBE money eligibility:',
+          allowedError
+        );
+
+        toast('Could not verify purchase eligibility.');
+        return;
+      }
+
+      if (!allowed) {
+        toast(
+          'Coin purchases are available only to eligible adult accounts.'
+        );
+        return;
+      }
+
+      const { data: packages, error } =
+        await sb
+          .from('coin_packages')
+          .select(
+            'id,name,coins,bonus_coins,price_zar,price_usd'
+          )
+          .eq('is_active', true)
+          .order('sort_order', {
+            ascending: true
+          });
+
+      if (error) throw error;
+
+      if (!packages?.length) {
+        toast('Coin packages are temporarily unavailable.');
+        return;
+      }
+
+      openModal(`
+        <h2>🪙 VYBE Coins</h2>
+
+        <p class="modal-sub">
+          Coins are used for VYBE Gifts and supported
+          premium interactions.
+        </p>
+
+        <div class="grid">
+
+          ${packages.map(pkg => `
+
+            <button
+              class="tile"
+              onclick="
+                startCoinCheckout(
+                  '${pkg.id}'
+                )
+              "
+            >
+
+              <strong>
+                ${Number(pkg.coins).toLocaleString()}
+                Coins
+                ${
+                  Number(pkg.bonus_coins || 0) > 0
+                    ? '+ ' +
+                      Number(pkg.bonus_coins)
+                        .toLocaleString() +
+                      ' Bonus'
+                    : ''
+                }
+              </strong>
+
+              <span>
+                ${pkg.name}
+              </span>
+
+              <span style="
+                margin-top:8px;
+                color:#fff;
+                font-weight:800;
+              ">
+                R ${Number(pkg.price_zar).toFixed(2)}
+              </span>
+
+              <span>
+                International:
+                $${Number(pkg.price_usd).toFixed(2)}
+              </span>
+
+            </button>
+
+          `).join('')}
+
+        </div>
+
+        <div
+          id="coinMsg"
+          class="message"
+        ></div>
+      `);
+
+    } catch (error) {
+
+      console.error(
+        'VYBE Coin packages:',
+        error
+      );
+
+      toast(
+        'Could not load Coin packages.'
+      );
+    }
+  };
+
+
+  /*
+   * Package selection.
+   *
+   * We deliberately stop before PayPal here.
+   * The payment provider is connected in the final
+   * PayPal stage.
+   */
+  window.startCoinCheckout = async function (
+    packageId
+  ) {
+
+    if (!state.user) {
+      openAuthModal('login');
+      return;
+    }
+
+    const msg =
+      document.getElementById('coinMsg');
+
+    try {
+
+      const { data: pkg, error } =
+        await sb
+          .from('coin_packages')
+          .select(
+            'id,name,coins,bonus_coins,price_zar,price_usd'
+          )
+          .eq('id', packageId)
+          .eq('is_active', true)
+          .maybeSingle();
+
+      if (error) throw error;
+
+      if (!pkg) {
+        toast('This Coin package is unavailable.');
+        return;
+      }
+
+      if (msg) {
+
+        msg.innerHTML = `
+          <strong>
+            ${Number(pkg.coins).toLocaleString()}
+            Coins
+            ${
+              Number(pkg.bonus_coins || 0)
+                ? ' + ' +
+                  Number(pkg.bonus_coins)
+                    .toLocaleString() +
+                  ' Bonus'
+                : ''
+            }
+          </strong>
+
+          <br>
+
+          R ${Number(pkg.price_zar).toFixed(2)}
+          /
+          $${Number(pkg.price_usd).toFixed(2)}
+
+          <br><br>
+
+          <span class="muted">
+            Secure payment checkout will be connected
+            in the PayPal stage.
+          </span>
+        `;
+
+        msg.style.display = 'block';
+      }
+
+    } catch (error) {
+
+      console.error(
+        'VYBE Coin selection:',
+        error
+      );
+
+      if (msg) {
+        msg.textContent =
+          'Could not select this Coin package.';
+        msg.style.display = 'block';
+      }
+    }
+  };
+
+})();
 </script>
 </body>
 </html>
