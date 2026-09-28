@@ -1076,6 +1076,291 @@ function renderFeed(){
   }
 
 })();
+/* =========================================================
+   VYBE SECURE BACKEND OVERRIDE
+   Paste directly above the existing closing </script>
+   ========================================================= */
+
+(function () {
+  'use strict';
+
+  const VYBE_GIFTS = {
+    "Heart": "3bfb143d-20ca-4cc5-a04d-5761cf2b4006",
+    "Fire": "23405c13-0350-40e7-9417-128d24d43e0d",
+    "Star": "01a5836b-470a-424c-ab56-4d5df8179609",
+    "Diamond": "799126bf-e250-4754-80a5-d5eff4463958",
+    "Crown": "36387adb-8109-4cb7-afba-68d87ae2ec35",
+    "VYBE Rocket": "421ac342-6509-41e7-8691-0f8958f5a991"
+  };
+
+  const VYBE_WAIT = 150;
+
+  function waitForSupabase(callback) {
+    if (typeof sb !== 'undefined' && sb) {
+      callback();
+      return;
+    }
+
+    setTimeout(function () {
+      waitForSupabase(callback);
+    }, VYBE_WAIT);
+  }
+
+  async function vybeRefreshFinancialState() {
+    try {
+      if (typeof sb === 'undefined' || !sb) return;
+
+      const walletResult = await sb.rpc('get_my_wallet_secure');
+
+      if (!walletResult.error && walletResult.data) {
+        const walletData = Array.isArray(walletResult.data)
+          ? walletResult.data[0]
+          : walletResult.data;
+
+        if (typeof state !== 'undefined') {
+          state.coins = Number(walletData.coin_balance || 0);
+          state.wallet = Number(walletData.coin_balance || 0);
+        }
+      }
+
+      const xpResult = await sb.rpc('get_my_xp');
+
+      if (!xpResult.error && xpResult.data) {
+        const xpData = Array.isArray(xpResult.data)
+          ? xpResult.data[0]
+          : xpResult.data;
+
+        if (typeof state !== 'undefined') {
+          state.xp = Number(xpData.xp || 0);
+        }
+      }
+
+      if (typeof renderRight === 'function') {
+        renderRight();
+      }
+
+    } catch (error) {
+      console.warn('VYBE financial refresh:', error);
+    }
+  }
+
+  /*
+   * Secure XP
+   * The actual XP award happens server-side.
+   */
+  window.vybeSecureXP = async function (amount, sourceType, referenceId, description) {
+    try {
+      amount = Number(amount || 0);
+
+      if (!Number.isFinite(amount) || amount <= 0) return false;
+
+      const result = await sb.rpc('award_vybe_xp', {
+        p_amount: Math.min(Math.floor(amount), 100),
+        p_source_type: sourceType || 'activity',
+        p_reference_id: referenceId || null,
+        p_description: description || null
+      });
+
+      if (result.error) {
+        console.warn('VYBE XP:', result.error);
+        return false;
+      }
+
+      await vybeRefreshFinancialState();
+      return true;
+
+    } catch (error) {
+      console.warn('VYBE XP:', error);
+      return false;
+    }
+  };
+
+  /*
+   * Secure gift sending.
+   *
+   * Usage:
+   * vybeSendGift(giftName, receiverId, videoId, postId)
+   */
+  window.vybeSendGift = async function (
+    giftName,
+    receiverId,
+    videoId,
+    postId
+  ) {
+    try {
+      if (!receiverId) {
+        if (typeof toast === 'function') {
+          toast('Gift recipient not found');
+        }
+        return false;
+      }
+
+      const giftId = VYBE_GIFTS[giftName];
+
+      if (!giftId) {
+        if (typeof toast === 'function') {
+          toast('Gift not available');
+        }
+        return false;
+      }
+
+      const result = await sb.rpc('send_vybe_gift', {
+        p_gift_id: giftId,
+        p_receiver_id: receiverId,
+        p_quantity: 1,
+        p_video_id: videoId || null,
+        p_post_id: postId || null
+      });
+
+      if (result.error) {
+        console.warn('VYBE Gift:', result.error);
+
+        if (typeof toast === 'function') {
+          toast(result.error.message || 'Gift could not be sent');
+        }
+
+        return false;
+      }
+
+      const data = Array.isArray(result.data)
+        ? result.data[0]
+        : result.data;
+
+      if (data && typeof state !== 'undefined') {
+        state.coins = Number(data.remaining_balance || 0);
+        state.wallet = state.coins;
+      }
+
+      if (typeof renderRight === 'function') {
+        renderRight();
+      }
+
+      if (typeof toast === 'function') {
+        toast(giftName + ' Gift sent 🎁');
+      }
+
+      return true;
+
+    } catch (error) {
+      console.error('VYBE Gift:', error);
+
+      if (typeof toast === 'function') {
+        toast('Gift could not be sent');
+      }
+
+      return false;
+    }
+  };
+
+  /*
+   * Secure wallet refresh whenever the user logs in.
+   */
+  window.vybeLoadSecureState = async function () {
+    await vybeRefreshFinancialState();
+  };
+
+  /*
+   * Secure LIVE join.
+   */
+  window.vybeJoinLive = async function (streamId) {
+    try {
+      if (!streamId) return null;
+
+      const result = await sb.rpc('join_vybe_live', {
+        p_stream_id: streamId
+      });
+
+      if (result.error) {
+        console.warn('VYBE LIVE join:', result.error);
+
+        if (typeof toast === 'function') {
+          toast(result.error.message || 'Unable to join LIVE');
+        }
+
+        return null;
+      }
+
+      const data = Array.isArray(result.data)
+        ? result.data[0]
+        : result.data;
+
+      return data || null;
+
+    } catch (error) {
+      console.error('VYBE LIVE join:', error);
+      return null;
+    }
+  };
+
+  /*
+   * Secure LIVE leave.
+   */
+  window.vybeLeaveLive = async function (streamId) {
+    try {
+      if (!streamId) return null;
+
+      const result = await sb.rpc('leave_vybe_live', {
+        p_stream_id: streamId
+      });
+
+      if (result.error) {
+        console.warn('VYBE LIVE leave:', result.error);
+        return null;
+      }
+
+      const data = Array.isArray(result.data)
+        ? result.data[0]
+        : result.data;
+
+      return data || null;
+
+    } catch (error) {
+      console.error('VYBE LIVE leave:', error);
+      return null;
+    }
+  };
+
+  /*
+   * Replace the old local-only XP function.
+   */
+  waitForSupabase(function () {
+
+    if (typeof window.addXP === 'function') {
+      window.addXP = function (amount) {
+        return window.vybeSecureXP(
+          amount,
+          'activity',
+          null,
+          'VYBE activity'
+        );
+      };
+    }
+
+    /*
+     * Initial secure balance/XP load.
+     */
+    window.vybeLoadSecureState();
+
+    /*
+     * Keep the secure state refreshed after authentication.
+     */
+    if (typeof sb !== 'undefined' && sb.auth) {
+      sb.auth.onAuthStateChange(function (event) {
+        if (
+          event === 'SIGNED_IN' ||
+          event === 'TOKEN_REFRESHED' ||
+          event === 'USER_UPDATED'
+        ) {
+          setTimeout(function () {
+            window.vybeLoadSecureState();
+          }, 300);
+        }
+      });
+    }
+
+  });
+
+})();
 </script>
 </body>
 </html>
