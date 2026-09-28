@@ -2355,6 +2355,171 @@ window.leaveVYBELive = async function (streamId) {
   };
 
 })();
+    </script>
+<script>
+/* VYBE PAYPAL CHECKOUT */
+
+window.startCoinCheckout = async function (packageId, currency = 'ZAR') {
+
+  if (!state.user) {
+    openAuthModal('login');
+    return;
+  }
+
+  const msg = document.getElementById('coinMsg');
+
+  try {
+
+    if (msg) {
+      msg.textContent = 'Connecting securely to PayPal...';
+      msg.style.display = 'block';
+    }
+
+    const { data, error } = await sb.functions.invoke(
+      'paypal-create-order',
+      {
+        body: {
+          productType: 'coin_package',
+          productId: packageId,
+          currency: currency
+        }
+      }
+    );
+
+    if (error) {
+      console.error('PayPal create order:', error);
+      throw new Error(error.message || 'Could not start PayPal checkout.');
+    }
+
+    if (!data?.approvalUrl) {
+      throw new Error('PayPal did not provide a checkout link.');
+    }
+
+    window.location.href = data.approvalUrl;
+
+  } catch (error) {
+
+    console.error('VYBE PayPal checkout:', error);
+
+    if (msg) {
+      msg.textContent =
+        error.message || 'Could not connect to PayPal.';
+      msg.style.display = 'block';
+    }
+
+    toast(
+      error.message || 'Could not start PayPal checkout.'
+    );
+  }
+};
+
+
+/* Handle the PayPal return to VYBE */
+
+(function handlePayPalReturn() {
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  const paypalStatus = params.get('paypal');
+  const orderId = params.get('token');
+
+  if (paypalStatus === 'cancelled') {
+
+    setTimeout(function () {
+      toast('PayPal payment cancelled.');
+    }, 700);
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+    return;
+  }
+
+  if (
+    paypalStatus !== 'success' ||
+    !orderId
+  ) {
+    return;
+  }
+
+  (async function () {
+
+    try {
+
+      toast('Confirming your PayPal payment...');
+
+      const { data, error } =
+        await sb.functions.invoke(
+          'paypal-capture-order',
+          {
+            body: {
+              orderId: orderId
+            }
+          }
+        );
+
+      if (error) {
+        console.error(
+          'PayPal capture:',
+          error
+        );
+
+        throw new Error(
+          error.message ||
+          'Could not confirm PayPal payment.'
+        );
+      }
+
+      if (!data?.success) {
+        throw new Error(
+          data?.error ||
+          'PayPal payment could not be confirmed.'
+        );
+      }
+
+      await window.vybeLoadSecureState();
+
+      toast(
+        '🎉 Payment successful! Your VYBE Coins have been added.'
+      );
+
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+
+      setTimeout(function () {
+        if (typeof buyCoins === 'function') {
+          buyCoins();
+        }
+      }, 500);
+
+    } catch (error) {
+
+      console.error(
+        'VYBE PayPal confirmation:',
+        error
+      );
+
+      toast(
+        error.message ||
+        'Payment confirmation failed.'
+      );
+
+    }
+
+  })();
+
+})();
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
