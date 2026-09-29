@@ -2422,24 +2422,33 @@ window.confirmStartLive = async function () {
 
     localStorage.setItem(
       'vybe_live',
-      JSON.stringify(state.live)
-    );
+  let liveRoomAttempts = 0;
 
-    closeModal();
-    showPage('live');
-setTimeout(() => {
-  if (typeof window.vybeOpenLiveRoom === 'function') {
-    window.vybeOpenLiveRoom();
+function bootVYBELiveRoom() {
+  liveRoomAttempts++;
+
+  if (
+    typeof window.vybeOpenLiveRoom === 'function' &&
+    state.live?.active
+  ) {
+    try {
+      window.vybeOpenLiveRoom();
+    } catch (e) {
+      console.warn('VYBE LIVE room:', e);
+    }
   }
-  window.dispatchEvent(new Event('vybe-live-started'));
-}, 80);
-    toast(
-      '🔴 You are LIVE! Up to ' +
-      state.live.maxParticipants +
-      ' people can join.'
-    );
 
-  } catch (error) {
+  window.dispatchEvent(new Event('vybe-live-started'));
+
+  if (
+    !document.querySelector('.vybe-live-room') &&
+    liveRoomAttempts < 40
+  ) {
+    setTimeout(bootVYBELiveRoom, 250);
+  }
+}
+
+setTimeout(bootVYBELiveRoom, 150);
 
     console.error('VYBE LIVE:', error);
 
