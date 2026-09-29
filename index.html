@@ -2422,6 +2422,8 @@ window.confirmStartLive = async function () {
 
     localStorage.setItem(
       'vybe_live',
+            JSON.stringify(state.live)
+    );
   let liveRoomAttempts = 0;
 
 function bootVYBELiveRoom() {
