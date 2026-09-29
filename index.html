@@ -2427,7 +2427,12 @@ window.confirmStartLive = async function () {
 
     closeModal();
     showPage('live');
-
+setTimeout(() => {
+  if (typeof window.vybeOpenLiveRoom === 'function') {
+    window.vybeOpenLiveRoom();
+  }
+  window.dispatchEvent(new Event('vybe-live-started'));
+}, 80);
     toast(
       '🔴 You are LIVE! Up to ' +
       state.live.maxParticipants +
