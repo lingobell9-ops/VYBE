@@ -186,7 +186,7 @@ async function startLive(){
     toast('Could not end the active LIVE.');
   }
   }
-function confirmStartLive(){state.live={active:true,title:document.getElementById('liveTitle').value.trim()||'VYBE LIVE',category:document.getElementById('liveCategory').value,guests:document.getElementById('liveGuests').value};localStorage.setItem('vybe_live',JSON.stringify(state.live));closeModal();showPage('live');toast('VYBE LIVE is ready. The Stage supports up to 20 people.')}
+
 function sendGift(name,cost){if(state.coins<cost){toast('Not enough VYBE Coins');return}state.coins-=cost;localStorage.setItem('vybe_coins',state.coins);toast(name+' Gift sent');renderRight()}
 function buyCoins(){openModal(`<h2>VYBE Coins</h2><p class="modal-sub">Coins are used for VYBE Gifts and supported premium interactions.</p><div class="grid">${[[100,'R 20'],[500,'R 90'],[1200,'R 199'],[2500,'R 399']].map(x=>`<button class="tile" onclick="startCoinCheckout(${x[0]})"><strong>${x[0].toLocaleString()} Coins</strong><span>${x[1]}</span></button>`).join('')}</div><div id="coinMsg" class="message"></div>`)}
 function startCoinCheckout(coins){if(!state.user){openAuthModal('login');return}document.getElementById('coinMsg').textContent=`${coins.toLocaleString()} Coins selected. Connect your payment provider to complete checkout.`;document.getElementById('coinMsg').style.display='block'}
