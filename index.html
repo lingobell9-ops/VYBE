@@ -82,6 +82,16 @@ async function profile(id){if(!id){go("profile");return}const r=await sb.from("p
 function go(p){S.page=p;if(p==="home"){document.getElementById("home").style.display="block";document.getElementById("root").innerHTML="";document.getElementById("homeNav")?.classList.add("on");renderFeed();return}document.getElementById("home").style.display="none";document.getElementById("homeNav")?.classList.remove("on");renderPage(p)}
 function render(){if(S.page==="home"){document.getElementById("home").style.display="block";renderFeed()}else{document.getElementById("home").style.display="none";renderPage(S.page)}}
 window.showPage=go;
+window.go=go;
+window.setFeed=setFeed;
+window.openCreate=openCreate;
+window.startLive=startLive;
+window.auth=auth;
+window.profile=profile;
+window.follow=follow;
+window.like=like;
+window.comment=comment;
+window.share=share;
 function renderPage(p){let h="";if(p==="profile")h=profilePage();else if(p==="wallet")h=walletPage();else if(p==="creator")h=creatorPage();else if(p==="live")h=livePage();else if(p==="discover")h=discoverPage();else if(p==="founder")h=founderPage();else if(p==="settings")h=settingsPage();else h=generic(p);document.getElementById("root").innerHTML=h}
 function generic(p){const n=p[0].toUpperCase()+p.slice(1);return `<section class="page show"><div class="hero"><span class="pill">VYBE</span><h1>${esc(n)} <span class="grad">is here.</span></h1><p class="muted">Explore creators, communities, gaming, music, events, jobs, local VYBEs and more.</p></div></section>`}
 function profilePage(){if(!S.user)return `<section class="page show"><div class="hero"><h1>Build your <span class="grad">VYBE identity.</span></h1><button class="primary" onclick="auth('login')">Log in</button></div></section>`;const p=S.p||{};return `<section class="page show"><div class="box ${S.founder?"founder":""}" style="padding:0;overflow:hidden"><div class="profilecover" style="${p.cover_url?`background-image:url(${esc(p.cover_url)})`:""}"></div><div class="profilebody"><div class="row between">${av(p,true)}<div class="row wrap"><button class="secondary" onclick="editProfile()">Edit</button><button class="secondary" onclick="asset('avatar')">Photo</button><button class="secondary" onclick="window.openVYBEProfileCosmetics?window.openVYBEProfileCosmetics():toast('Profile Studio is loading')">Style</button></div></div><h2 style="margin-top:9px">${esc(p.display_name||"VYBE Member")}</h2><div class="muted">@${esc(p.username||"member")}</div>${S.founder?'<div class="pill" style="margin-top:7px">👑 VYBE Founder & Owner</div>':""}<p style="margin-top:8px">${esc(p.bio||"Your world. Your people. Your story.")}</p><div class="kpi" style="margin-top:13px"><div><b>${Number(p.followers_count||0)}</b><small>Followers</small></div><div><b>${Number(p.following_count||0)}</b><small>Following</small></div><div><b>${Number(p.likes_count||0)}</b><small>Likes</small></div></div></div></div><div class="grid"><button class="tile" onclick="go('creator')"><b>Creator Hub</b><small>LIVE, gifts and earnings.</small></button><button class="tile" onclick="go('wallet')"><b>Wallet</b><small>${S.coins.toLocaleString()} Coins</small></button>${S.founder?'<button class="tile" onclick="go(\'founder\')"><b>👑 Founder Dashboard</b><small>Owner controls and rewards.</small></button>':""}<button class="tile" onclick="go('settings')"><b>Settings</b><small>Privacy and security.</small></button></div></section>`}
@@ -182,7 +192,7 @@ async function submitAuth(mode){const e=document.getElementById("ae").value.trim
 async function signout(){await sb.auth.signOut();S.user=null;S.p=null;S.founder=false;go("home");toast("Signed out")}
 async function boot(){try{await load();if(sb)await paypalReturn()}catch(e){console.error("VYBE boot error",e);renderFeed();toast("VYBE loaded in offline mode. Refresh to reconnect.")}}
 if(sb)sb.auth.onAuthStateChange(()=>setTimeout(load,0));
-window.openModal=modal;window.closeModal=closeModal;window.openAuthModal=auth;window.openSearch=openSearch;window.openLiveDirectory=openLiveDirectory;
+window.openModal=modal;window.closeModal=closeModal;window.openAuthModal=auth;window.openSearch=openSearch;window.openLiveDirectory=openLiveDirectory;window.closeRoom=closeRoom;window.toggleMic=toggleMic;window.flipCamera=flipCamera;window.liveSettings=liveSettings;window.sendComment=sendComment;window.openGiftPicker=openGiftPicker;
 renderFeed();
 boot();
 </script>
